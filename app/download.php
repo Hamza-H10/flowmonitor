@@ -4,7 +4,7 @@ require_once 'C:\xampp\htdocs\flowmonitor\app\model\db.php';
 
 function downloadCSV() {
     $database = new Database();
-    $stmt = $database->execute("SELECT * FROM history");
+    $stmt = $database->execute("SELECT * FROM history ORDER BY update_date DESC");
     $num = $stmt->rowCount();
 
     if ($num) {
@@ -18,6 +18,7 @@ function downloadCSV() {
 
         // Open a new output stream for the CSV file
         $output = fopen('php://output', 'w');
+        $header = array("id","device_id","flow_rate","total_pos_flow","signal_strength","update_time","update_date");
         if ($output && $rows) {
             // Write the CSV header (column names)
             fputcsv($output, array_keys($rows[0]));
@@ -48,3 +49,4 @@ if (isset($_GET['action']) && $_GET['action'] === 'downloadCSV') {
     echo json_encode(array("message" => "Unknown action. The requested action cannot be performed.", "records" => null));
 }
 ?>
+

@@ -177,12 +177,11 @@ $.ajax({
             addUrl:"<?=$app_root?>/api/?function=history_add",
             delUrl:"<?=$app_root?>/api/?function=history_delete&device_id=<?=$d_id?>&del_id=", 
             editUrl:"<?=$app_root?>/api/?function=history_edit&row_id=",
-            fetchUrl:"<?=$app_root?>/api/?function=history_fetch&row_id=",
-            fetchUrl: "<?=$app_root?>/api/?function=history_fetch",
+            fetchUrl:"<?=$app_root?>/api/?function=history_fetch&row_id=",         
             selectMulti: true,
             });
 
-
+//fetchUrl: "<?=$app_root?>/api/?function=history_fetch",
         
     $(function() {
         $('.selection.dropdown').dropdown();
@@ -203,6 +202,9 @@ $.ajax({
         //table1.init();
         table1.loadPage(1, true);
 
+
+        //In the below snippet when the commented or uncommented in both ways the Add (device log details) are working.
+        //and also there is no effect on the data table as well. Findings - don't know what the snippet is used for
         $('.ui.form').form({
         fields: {
             totalflow: {
@@ -234,7 +236,6 @@ $.ajax({
             }            
           }
         });
-
     });
 // --------------    
     function downloadCSV() {

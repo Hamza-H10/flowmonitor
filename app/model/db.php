@@ -28,11 +28,10 @@ class Database {
         try{
             $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
             $this->conn->exec("set names utf8");
-            $this->conn->exec("SET @@session.time_zone = '+05:30';");
+            $this->conn->exec("SET @@session.time_zone = '+05:30';");//this ensures that any date and time operations performed in the database will consider this time zone.
         } catch(PDOException $exception) {
             echo "Connection error: " . $exception->getMessage();
         }
-
     }
 
     public function execute($query) {
