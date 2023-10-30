@@ -11,6 +11,7 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 ?>
 <?php
 include('export.php');
+include('js/')
 //include('inc/db_connect.php'); // Include your PDO database connection code
 ?>
 <!-- ----------------------- -->
@@ -158,7 +159,7 @@ include('export.php');
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 
-<!-- <script src="js/datepickers.js"></script> -->
+<script src="js/datepickers.js"></script>
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/semantic.min.js"></script>
 <script src="js/calendar.min.js"></script>
@@ -173,7 +174,7 @@ include('export.php');
     addUrl: "<?= $app_root ?>/api/?function=history_add",
     delUrl: "<?= $app_root ?>/api/?function=history_delete&device_id=<?= $d_id ?>&del_id=", //this is creating the url for delete by concatinating values of "app_root", "function", "device_id", and a static string "del_id=". 
     editUrl: "<?= $app_root ?>/api/?function=history_edit&row_id=",
-    fetchUrl: "<?= $app_root ?>/api/?function=history_fetch&row_id=",
+    // fetchUrl: "<?= $app_root ?>/api/?function=history_fetch&row_id=",
     selectMulti: true,
   });
 
