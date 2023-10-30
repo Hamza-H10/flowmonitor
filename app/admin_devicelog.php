@@ -11,15 +11,12 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 ?>
 <?php
 include('export.php');
-include('js/')
 //include('inc/db_connect.php'); // Include your PDO database connection code
 ?>
+
 <!-- ----------------------- -->
 <!-- the date buttons will style from bootstrappcdn library but enabling this delete function is not working fix this. -->
 
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <!-- ----------------------- -->
 
 <div class="ui main container">
@@ -117,7 +114,7 @@ include('js/')
               </div>
               <div class="col-md-3">
                 To<input type="text" name="toDate" class="form-control" value="<?php echo date("Y-m-d"); ?>" readonly />
-                <?php echo $endDate; ?>
+                <?php echo $endDateMessage; ?>
               </div>
             </div>
             <div class="col-md-2">
@@ -174,7 +171,7 @@ include('js/')
     addUrl: "<?= $app_root ?>/api/?function=history_add",
     delUrl: "<?= $app_root ?>/api/?function=history_delete&device_id=<?= $d_id ?>&del_id=", //this is creating the url for delete by concatinating values of "app_root", "function", "device_id", and a static string "del_id=". 
     editUrl: "<?= $app_root ?>/api/?function=history_edit&row_id=",
-    // fetchUrl: "<?= $app_root ?>/api/?function=history_fetch&row_id=",
+    fetchUrl: "<?= $app_root ?>/api/?function=history_fetch&row_id=",
     selectMulti: true,
   });
 

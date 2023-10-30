@@ -1,9 +1,17 @@
-var $j = $.noConflict();
 
-$j(document).ready(function(){
-    $j('.input-daterange').datepicker({
-     todayBtn:'linked',
-     format: "yyyy-mm-dd",
-     autoclose: true
-    });
+// var $j = $.noConflict();
+
+// $j(document).ready(function(){
+//     $j('.input-daterange').datepicker({
+//      todayBtn:'linked',
+//      format: "yyyy-mm-dd",
+//      autoclose: true
+//     });
+// });
+
+$('.input-daterange').datepicker({
+    todayBtn:'linked',
+    format: "yyyy-mm-dd",
+    autoclose: true
 });
+
