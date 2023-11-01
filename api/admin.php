@@ -540,7 +540,7 @@ switch ($redirect) {
                 array("message" => "No records found.", "records" => null)
             );
         }
-
+        //the below query is working fine have checked in the php my admin replacing the placeholders
         $stmt = $database->execute("SELECT id as row_id, flow_rate, total_pos_flow, signal_strength, update_date FROM history $search_text ORDER BY update_date DESC, update_time DESC LIMIT $page_start, $page_limit");
         $num = $stmt->rowCount();
 

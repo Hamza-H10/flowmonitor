@@ -168,6 +168,9 @@ include_once('export.php');
 <script>
   var table1 = new Tabulation({
     apiUrl: "<?= $app_root ?>/api/?function=device_history&device_id=<?= $d_id ?>&pgno=",
+
+    exportUrl: "<?= $app_root?>/api/?function=history_export&device_id=<?=$d_id?>&pgno=",
+    
     addUrl: "<?= $app_root ?>/api/?function=history_add",
     delUrl: "<?= $app_root ?>/api/?function=history_delete&device_id=<?= $d_id ?>&del_id=", //this is creating the url for delete by concatinating values of "app_root", "function", "device_id", and a static string "del_id=". 
     editUrl: "<?= $app_root ?>/api/?function=history_edit&row_id=",
