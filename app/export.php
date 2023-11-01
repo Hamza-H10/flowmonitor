@@ -1,11 +1,11 @@
 <?php
 //This file has its own database credentials created here.
-//when the website will be live this may not work because the connection string is not properly to that
-include_once("app/model/db.php"); // Include the Database class file
+//when the website will be live this may not work because the conn1ection string is not properly to that
+//include_once("app/model/db.php"); // Include the Database class file
 
 try {
-	$conn = new PDO("mysql:host=localhost;dbname=flowmeter_db", "root", "");
-	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$conn1 = new PDO("mysql:host=localhost;dbname=flowmeter_db", "root", "");
+	$conn1->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
 	die("Connection failed: " . $e->getMessage());
 }
@@ -13,7 +13,7 @@ try {
 // $d_id = getValue('device_id', false, 0);
 // $database = new Database();
 // // $stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
-// $conn = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
+// $conn1 = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
 // $result = $stmt->fetch();
 // echo $result['device_number'];
 // echo $result['device_friendly_name'];
@@ -39,8 +39,8 @@ if (isset($_POST["export"])) {
 		$toDate = $_POST["toDate"];
 
 		$query = "SELECT * FROM history WHERE update_date >= :fromDate AND update_date <= :toDate ORDER BY update_date DESC";
-		// $stmt = $conn->prepare($query);
-		$stmt = $conn->prepare($query);
+		// $stmt = $conn1->prepare($query);
+		$stmt = $conn1->prepare($query);
 		$stmt->bindParam(":fromDate", $fromDate);
 		$stmt->bindParam(":toDate", $toDate);
 		$stmt->execute();

@@ -155,7 +155,7 @@ switch ($redirect) {
 
                 $user_type = ($row['user_type'] == 1) ? "Admin" : "User";
                 $alert_item = array(
-                    "row_id" => $row['row_id'],
+                    "row_id" => $row['row_id'], // $row  is an array that contains some data, and  row_id  is one of the keys in that array. The code is retrieving the value associated with the key  row_id  from the  $row  array. 
                     "display_name" => html_entity_decode($row['display_name']),
                     "devices" => "<a href='$app_root/?page=devices&user_id=" . $row['row_id'] . "'><i class='microchip icon'></i></a>",
                     "user_email" => $row['user_email'],
@@ -377,9 +377,9 @@ switch ($redirect) {
 
     case "history_fetch":
         $edit_id = getValue("row_id"); // Get the value of `row_id` from the request
-        //$stmt = $database->execute("SELECT flow_rate, total_pos_flow, signal_strength, update_date FROM history WHERE id=".$edit_id);
+        $stmt = $database->execute("SELECT flow_rate, total_pos_flow, signal_strength, update_date FROM history WHERE id=".$edit_id);
         // ----------------------
-        $stmt = $database->execute("SELECT flow_rate, total_pos_flow, signal_strength, update_date FROM history");
+        //$stmt = $database->execute("SELECT flow_rate, total_pos_flow, signal_strength, update_date FROM history");
         // ----------------------
         http_response_code(200); // Set the HTTP response code to 200 (OK)
 
