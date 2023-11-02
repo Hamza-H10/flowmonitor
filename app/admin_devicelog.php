@@ -94,7 +94,54 @@ include_once('export.php');
         <i class="trash alternate icon"></i>
       </button>
 
-      <div class="second-eleven-wide-column">
+      <!-- Download Button --><button class="ui circular primary icon button" id="download">
+  <i class="download icon"></i> Download
+</button>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Add an event listener to the download button
+    document.getElementById("download").addEventListener("click", function () {
+        // Display a message on the user interface
+        var message = document.createElement("p");
+        message.textContent = "Downloading all rows, please wait...";
+        document.body.appendChild(message);
+        // Trigger an AJAX request
+$.ajax({
+    // url: 'http://localhost/flowmonitor/app/download.php?action=downloadCSV',
+    Url: "<?=$app_root?>/api/?function=history_export&device_id=<?=$d_id?>",
+    method: 'GET',
+    xhrFields: {
+        responseType: 'blob' // Receive data as a binary blob
+    },
+    success: function (data, status, xhr) {
+        if (xhr.getResponseHeader('Content-Disposition')) {
+            console.log('Download started');
+            var filename = xhr.getResponseHeader('Content-Disposition').split('filename=')[1];
+            var blob = new Blob([data], { type: 'application/octet-stream' });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } else {
+            console.log('Download failed');
+        }
+    },
+    error: function () {
+        console.log('AJAX request failed');
+    },
+    complete: function () {
+        message.remove();
+    }
+});
+    });
+</script>
+
+      <!-- <div class="second-eleven-wide-column">
         <style>
           @media (max-width: 768px) {
 
@@ -131,8 +178,8 @@ include_once('export.php');
         </div>
         <br />
       </div>
+    </div> -->
 
-    </div>
     <div class="five wide column right floated right aligned">
       <div class="ui icon input">
         <input type="text" placeholder="Search..." id="table1_search">
