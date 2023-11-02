@@ -468,9 +468,8 @@ switch ($redirect) {
 
         // -------------------------
         //switch($redirect) {
-    case "history_export":
-        $search_text = " WHERE device_id=$d_id ";
-        $stmt = $database->execute("SELECT COUNT(*) AS total_records FROM history $search_text");
+    case "history_download":
+        $stmt = $database->execute("SELECT * FROM history");
         $num = $stmt->rowCount();
 
         if ($num) {
