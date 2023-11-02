@@ -1,4 +1,3 @@
-
 <?php
 // Start a new or resume the existing session.
 session_start();
@@ -7,7 +6,7 @@ session_start();
 require_once './app/model/db.php';
 
 // Get the 'page' and 'action' parameters from the request.
-$redirect = getValue("page", false, "home");//the default value of the page parameter is set to "home" if it is not provided or is false.
+$redirect = getValue("page", false, "home"); //the default value of the page parameter is set to "home" if it is not provided or is false.
 $page_action = getValue("action", false, null);
 
 // Check if a user session is already active.
@@ -29,7 +28,7 @@ if ($redirect == "logout") {
         if (session_id() != "" || isset($_COOKIE[session_name()])) {
             // Delete the session cookie.
             setcookie(session_name(), '', time() - 2592000, '/');
-        }
+        } //this is to destroy the current session 
 
         session_destroy(); // Destroy the session.
         header("refresh:1;url=?page=home"); // Redirect to the home page after 1 second.
@@ -78,7 +77,7 @@ if ($logged_in == true) {
             die("Invalid link specified");
         }
     } elseif ($session_user_type == 2) {
-        echo "<div id='positive_message'></div>";//providing message to the users interface
+        echo "<div id='positive_message'></div>"; //providing message to the users interface
         echo "<div id='error_message'></div>";
 
         $page_open = "./app/page_" . $redirect . ".php";
