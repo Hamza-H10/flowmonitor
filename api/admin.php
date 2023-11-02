@@ -469,26 +469,35 @@ switch ($redirect) {
         // -------------------------
         //switch($redirect) {
     case "history_export":
-        $stmt = $database->execute("SELECT * FROM history");
+        $search_text = " WHERE device_id=$d_id ";
+        $stmt = $database->execute("SELECT COUNT(*) AS total_records FROM history $search_text");
         $num = $stmt->rowCount();
 
         if ($num) {
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
             // Set the content type for a file download
+            $fileName = "DeviceLog_export_" . date('Ymd') . ".csv";
             header('Content-Type: text/csv');
-            header('Content-Disposition: attachment; filename="export.csv"');
-            header('Pragma: no-cache');
-            header('Expires: 0');
-
+            header("Content-Disposition: attachment; filename=$fileName");
+            header("Content-Type: application/csv;");
+            // header('Pragma: no-cache');
+            // header('Expires: 0');
             // Open a new output stream for the CSV file
             $output = fopen('php://output', 'w');
+            $header = array("flow_rate", "total_pos_flow", "signal_strength", "update_date");
+			
             if ($output && $rows) {
                 // Write the CSV header (column names)
                 fputcsv($output, array_keys($rows[0]));
+                $headerData = array(
+					$order["flow_rate"],
+					$order["total_pos_flow"],
+					$order["signal_strength"],
+					$order["update_date"]
+				);
                 // Write each row to the CSV file
                 foreach ($rows as $row) {
-                    fputcsv($output, $row);
+                    fputcsv($output, $headerData);
                 }
                 fclose($output);
             } else {
