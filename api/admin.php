@@ -468,7 +468,7 @@ switch ($redirect) {
 
         // -------------------------
         //switch($redirect) {
-    case "history_download":
+    case "history_export":
         $stmt = $database->execute("SELECT * FROM history");
         $num = $stmt->rowCount();
 
