@@ -123,7 +123,7 @@ include_once('export.php');
           document.body.appendChild(message);
           // Trigger an AJAX request
           $.ajax({
-            // url: 'http://localhost/flowmonitor/app/download.php?action=downloadCSV',
+            //url: 'http://localhost/flowmonitor/app/download.php?action=downloadCSV',
             Url: "<?= $app_root ?>/api/?function=history_export&device_id=<?= $d_id ?>",
             method: 'GET',
             xhrFields: {
@@ -234,7 +234,7 @@ include_once('export.php');
     var table1 = new Tabulation({
       apiUrl: "<?= $app_root ?>/api/?function=device_history&device_id=<?= $d_id ?>&pgno=",
 
-      exportUrl: "<?= $app_root ?>/api/?function=history_export&device_id=<?= $d_id ?>&pgno=",
+      downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_id ?>&pgno=",
 
       addUrl: "<?= $app_root ?>/api/?function=history_add",
       delUrl: "<?= $app_root ?>/api/?function=history_delete&device_id=<?= $d_id ?>&del_id=", //this is creating the url for delete by concatinating values of "app_root", "function", "device_id", and a static string "del_id=". 

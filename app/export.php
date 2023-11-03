@@ -1,7 +1,5 @@
 <?php
-//This fileCSV has its own database credentials created here.
-//when the website will be live this may not work because the conn1ection string is not properly to that
-//include_once("app/model/db.php"); // Include the Database class fileCSV
+
 
 try {
 	$conn1 = new PDO("mysql:host=localhost;dbname=flowmeter_db", "root", "");
@@ -9,15 +7,6 @@ try {
 } catch (PDOException $e) {
 	die("Connection failed: " . $e->getMessage());
 }
-
-// $d_id = getValue('device_id', false, 0);
-// $database = new Database();
-// // $stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
-// $conn1 = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
-// $result = $stmt->fetch();
-// echo $result['device_number'];
-// echo $result['device_friendly_name'];
-
 
 // retrieve our table contents
 if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
