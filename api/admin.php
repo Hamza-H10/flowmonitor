@@ -377,7 +377,7 @@ switch ($redirect) {
 
     case "history_fetch":
         $edit_id = getValue("row_id"); // Get the value of `row_id` from the request
-        $stmt = $database->execute("SELECT flow_rate, total_pos_flow, signal_strength, update_date FROM history WHERE id=".$edit_id);
+        $stmt = $database->execute("SELECT flow_rate, total_pos_flow, signal_strength, update_date FROM history WHERE id=" . $edit_id);
         // ----------------------
         //$stmt = $database->execute("SELECT flow_rate, total_pos_flow, signal_strength, update_date FROM history");
         // ----------------------
@@ -484,7 +484,7 @@ switch ($redirect) {
             // Open a new output stream for the CSV file
             $output = fopen('php://output', 'w');
             $header = array("flow_rate", "total_pos_flow", "signal_strength", "update_date");
-            
+
             if ($output && $rows) {
                 // Write the CSV header (column names)
                 fputcsv($output, array_keys($rows[0]));

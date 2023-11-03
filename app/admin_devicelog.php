@@ -94,54 +94,72 @@ include_once('export.php');
         <i class="trash alternate icon"></i>
       </button>
 
-      <!-- Download Button<button class="ui circular primary icon button" id="download">
-  <i class="download icon"></i> Download
-</button>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    // Add an event listener to the download button
-    document.getElementById("download").addEventListener("click", function () {
-        // Display a message on the user interface
-        var message = document.createElement("p");
-        message.textContent = "Downloading all rows, please wait...";
-        document.body.appendChild(message);
-        // Trigger an AJAX request
-$.ajax({
-    // url: 'http://localhost/flowmonitor/app/download.php?action=downloadCSV',
-    Url: "<?= $app_root ?>/api/?function=history_export&device_id=<?= $d_id ?>",
-    method: 'GET',
-    xhrFields: {
-        responseType: 'blob' // Receive data as a binary blob
-    },
-    success: function (data, status, xhr) {
-        if (xhr.getResponseHeader('Content-Disposition')) {
-            console.log('Download started');
-            var filename = xhr.getResponseHeader('Content-Disposition').split('filename=')[1];
-            var blob = new Blob([data], { type: 'application/octet-stream' });
-            var url = window.URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        } else {
-            console.log('Download failed');
-        }
-    },
-    error: function () {
-        console.log('AJAX request failed');
-    },
-    complete: function () {
-        message.remove();
-    }
-});
-    });
-</script> -->
+      <!-- From Date -->
+      <div class="ui calendar" id="fromDate">
+        <div class="ui input left icon">
+          <i class="calendar icon"></i>
+          <input type="date" placeholder="From Date">
+        </div>
+      </div>
+      <!-- To Date -->
+      <div class="ui calendar" id="toDate">
+        <div class="ui input left icon">
+          <i class="calendar icon"></i>
+          <input type="date" placeholder="To Date">
+        </div>
+      </div>
 
-      <div class="second-eleven-wide-column">
+      <!-- Download Button -->
+      <button class="ui circular primary icon button" id="download">
+        <i class="download icon"></i> Download
+      </button>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+        // Add an event listener to the download button
+        document.getElementById("download").addEventListener("click", function() {
+          // Display a message on the user interface
+          var message = document.createElement("p");
+          message.textContent = "Downloading all rows, please wait...";
+          document.body.appendChild(message);
+          // Trigger an AJAX request
+          $.ajax({
+            // url: 'http://localhost/flowmonitor/app/download.php?action=downloadCSV',
+            Url: "<?= $app_root ?>/api/?function=history_export&device_id=<?= $d_id ?>",
+            method: 'GET',
+            xhrFields: {
+              responseType: 'blob' // Receive data as a binary blob
+            },
+            success: function(data, status, xhr) {
+              if (xhr.getResponseHeader('Content-Disposition')) {
+                console.log('Download started');
+                var filename = xhr.getResponseHeader('Content-Disposition').split('filename=')[1];
+                var blob = new Blob([data], {
+                  type: 'application/octet-stream'
+                });
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+              } else {
+                console.log('Download failed');
+              }
+            },
+            error: function() {
+              console.log('AJAX request failed');
+            },
+            complete: function() {
+              message.remove();
+            }
+          });
+        });
+      </script>
+
+      <!-- <div class="second-eleven-wide-column">
         <style>
           @media (max-width: 768px) {
 
@@ -178,102 +196,102 @@ $.ajax({
         </div>
         <br />
       </div>
-    </div>
+    </div> -->
 
-    <div class="five wide column right floated right aligned">
-      <div class="ui icon input">
-        <input type="text" placeholder="Search..." id="table1_search">
-        <i class="circular delete link icon" id="table1_clear_btn"></i>
-        <i class="inverted circular search link icon" id="table1_search_btn"></i>
+      <div class="five wide column right floated right aligned">
+        <div class="ui icon input">
+          <input type="text" placeholder="Search..." id="table1_search">
+          <i class="circular delete link icon" id="table1_clear_btn"></i>
+          <i class="inverted circular search link icon" id="table1_search_btn"></i>
+        </div>
+      </div>
+      <div id="table1_datawindow" class="table_datawindow"></div>
+      <!-- <div class="content" id="info"></div> -->
+      <div id="table1_pagination" class="eleven wide column"></div>
+      <div class="five wide column right floated right aligned">
+        <h4 class="ui right floated">
+          <div class="content" id="table1_info"></div>
+        </h4>
       </div>
     </div>
-    <div id="table1_datawindow" class="table_datawindow"></div>
-    <!-- <div class="content" id="info"></div> -->
-    <div id="table1_pagination" class="eleven wide column"></div>
-    <div class="five wide column right floated right aligned">
-      <h4 class="ui right floated">
-        <div class="content" id="table1_info"></div>
-      </h4>
-    </div>
   </div>
-</div>
 
 
-<!--NOTE: At this place including this jquery-3.3.1.min.js in any form is cause the error of datepicker is not a function because the same script is declared above and not cause the issue.  -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+  <!--NOTE: At this place including this jquery-3.3.1.min.js in any form is cause the error of datepicker is not a function because the same script is declared above and not cause the issue.  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 
-<script src="js/datepickers.js"></script>
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/semantic.min.js"></script>
-<script src="js/calendar.min.js"></script>
-<script src="js/pagination.js"></script>
-<script src="js/tabulation.js"></script>
+  <script src="js/datepickers.js"></script>
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/semantic.min.js"></script>
+  <script src="js/calendar.min.js"></script>
+  <script src="js/pagination.js"></script>
+  <script src="js/tabulation.js"></script>
 
 
 
-<script>
-  var table1 = new Tabulation({
-    apiUrl: "<?= $app_root ?>/api/?function=device_history&device_id=<?= $d_id ?>&pgno=",
+  <script>
+    var table1 = new Tabulation({
+      apiUrl: "<?= $app_root ?>/api/?function=device_history&device_id=<?= $d_id ?>&pgno=",
 
-    exportUrl: "<?= $app_root ?>/api/?function=history_export&device_id=<?= $d_id ?>&pgno=",
+      exportUrl: "<?= $app_root ?>/api/?function=history_export&device_id=<?= $d_id ?>&pgno=",
 
-    addUrl: "<?= $app_root ?>/api/?function=history_add",
-    delUrl: "<?= $app_root ?>/api/?function=history_delete&device_id=<?= $d_id ?>&del_id=", //this is creating the url for delete by concatinating values of "app_root", "function", "device_id", and a static string "del_id=". 
-    editUrl: "<?= $app_root ?>/api/?function=history_edit&row_id=",
-    fetchUrl: "<?= $app_root ?>/api/?function=history_fetch&row_id=",
-    selectMulti: true,
-  });
-
-  $(function() {
-    $('.selection.dropdown').dropdown();
-    $('.ui.checkbox').checkbox();
-    $('#update_date_div').calendar({
-      type: 'date',
-      formatter: {
-        date: function(date, settings) {
-          if (!date) return '';
-          var day = date.getDate();
-          var month = date.getMonth() + 1;
-          var year = date.getFullYear();
-          return year + '-' + month + '-' + day;
-        }
-      }
+      addUrl: "<?= $app_root ?>/api/?function=history_add",
+      delUrl: "<?= $app_root ?>/api/?function=history_delete&device_id=<?= $d_id ?>&del_id=", //this is creating the url for delete by concatinating values of "app_root", "function", "device_id", and a static string "del_id=". 
+      editUrl: "<?= $app_root ?>/api/?function=history_edit&row_id=",
+      fetchUrl: "<?= $app_root ?>/api/?function=history_fetch&row_id=",
+      selectMulti: true,
     });
 
-    //table1.init();
-    table1.loadPage(1, true);
-
-    //In the below snippet when the commented or uncommented in both ways the Add (device log details) are working.
-    //and also there is no effect on the data table as well. Findings - don't know what the snippet is used for
-    $('.ui.form').form({
-      fields: {
-        totalflow: {
-          identifier: 'total_pos_flow',
-          rules: [{
-            type: 'integer',
-            prompt: 'Please enter an integer value'
-          }]
-        },
-        signalstrength: {
-          identifier: 'signal_strength',
-          rules: [{
-            type: 'integer[0..100]',
-            prompt: 'Please enter an integer value from 0 to 100'
-          }]
-        },
-        flowrate: {
-          identifier: 'flow_rate',
-          rules: [{
-            type: 'decimal',
-            prompt: 'Please enter a valid decimal'
-          }]
+    $(function() {
+      $('.selection.dropdown').dropdown();
+      $('.ui.checkbox').checkbox();
+      $('#update_date_div').calendar({
+        type: 'date',
+        formatter: {
+          date: function(date, settings) {
+            if (!date) return '';
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            return year + '-' + month + '-' + day;
+          }
         }
-      }
+      });
+
+      //table1.init();
+      table1.loadPage(1, true);
+
+      //In the below snippet when the commented or uncommented in both ways the Add (device log details) are working.
+      //and also there is no effect on the data table as well. Findings - don't know what the snippet is used for
+      $('.ui.form').form({
+        fields: {
+          totalflow: {
+            identifier: 'total_pos_flow',
+            rules: [{
+              type: 'integer',
+              prompt: 'Please enter an integer value'
+            }]
+          },
+          signalstrength: {
+            identifier: 'signal_strength',
+            rules: [{
+              type: 'integer[0..100]',
+              prompt: 'Please enter an integer value from 0 to 100'
+            }]
+          },
+          flowrate: {
+            identifier: 'flow_rate',
+            rules: [{
+              type: 'decimal',
+              prompt: 'Please enter a valid decimal'
+            }]
+          }
+        }
+      });
+
     });
+  </script>
+  </body>
 
-  });
-</script>
-</body>
-
-</html>
+  </html>
