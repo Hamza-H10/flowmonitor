@@ -10,20 +10,6 @@ try {
 	die("Connection failed: " . $e->getMessage());
 }
 
-// $d_id = getValue('device_id', false, 0);
-// $database = new Database();
-// // $stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
-// $conn1 = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
-// $result = $stmt->fetch();
-// echo $result['device_number'];
-// echo $result['device_friendly_name'];
-
-
-// retrieve our table contents
-if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-  $device_name = $row["device_friendly_name"];
-  $device_number = $row["device_number"];
-}
 
 $startDateMessage = '';
 $endDateMessage = '';
