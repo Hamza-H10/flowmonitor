@@ -94,7 +94,7 @@ include_once('export.php');
         <i class="trash alternate icon"></i>
       </button>
 
-      <!-- Download Button --><button class="ui circular primary icon button" id="download">
+      <!-- Download Button<button class="ui circular primary icon button" id="download">
   <i class="download icon"></i> Download
 </button>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -108,7 +108,7 @@ include_once('export.php');
         // Trigger an AJAX request
 $.ajax({
     // url: 'http://localhost/flowmonitor/app/download.php?action=downloadCSV',
-    Url: "<?=$app_root?>/api/?function=history_export&device_id=<?=$d_id?>",
+    Url: "<?= $app_root ?>/api/?function=history_export&device_id=<?= $d_id ?>",
     method: 'GET',
     xhrFields: {
         responseType: 'blob' // Receive data as a binary blob
@@ -139,9 +139,9 @@ $.ajax({
     }
 });
     });
-</script>
+</script> -->
 
-      <!-- <div class="second-eleven-wide-column">
+      <div class="second-eleven-wide-column">
         <style>
           @media (max-width: 768px) {
 
@@ -178,7 +178,7 @@ $.ajax({
         </div>
         <br />
       </div>
-    </div> -->
+    </div>
 
     <div class="five wide column right floated right aligned">
       <div class="ui icon input">
@@ -216,8 +216,8 @@ $.ajax({
   var table1 = new Tabulation({
     apiUrl: "<?= $app_root ?>/api/?function=device_history&device_id=<?= $d_id ?>&pgno=",
 
-    exportUrl: "<?= $app_root?>/api/?function=history_export&device_id=<?=$d_id?>&pgno=",
-    
+    exportUrl: "<?= $app_root ?>/api/?function=history_export&device_id=<?= $d_id ?>&pgno=",
+
     addUrl: "<?= $app_root ?>/api/?function=history_add",
     delUrl: "<?= $app_root ?>/api/?function=history_delete&device_id=<?= $d_id ?>&del_id=", //this is creating the url for delete by concatinating values of "app_root", "function", "device_id", and a static string "del_id=". 
     editUrl: "<?= $app_root ?>/api/?function=history_edit&row_id=",
