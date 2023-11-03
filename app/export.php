@@ -1,7 +1,7 @@
 <?php
-//This file has its own database credentials created here.
+//This fileCSV has its own database credentials created here.
 //when the website will be live this may not work because the conn1ection string is not properly to that
-//include_once("app/model/db.php"); // Include the Database class file
+//include_once("app/model/db.php"); // Include the Database class fileCSV
 
 try {
 	$conn1 = new PDO("mysql:host=localhost;dbname=flowmeter_db", "root", "");
@@ -21,8 +21,8 @@ try {
 
 // retrieve our table contents
 if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-  $device_name = $row["device_friendly_name"];
-  $device_number = $row["device_number"];
+	$device_name = $row["device_friendly_name"];
+	$device_number = $row["device_number"];
 }
 
 $startDateMessage = '';
@@ -44,27 +44,26 @@ if (isset($_POST["export"])) {
 		$stmt->bindParam(":fromDate", $fromDate);
 		$stmt->bindParam(":toDate", $toDate);
 		$stmt->execute();
-		$filterOrders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$filterRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-		if (count($filterOrders)) {
+		if (count($filterRows)) {
 			$fileName = "DeviceLog_export_" . date('Ymd') . ".csv";
 			header("Content-Description: File Transfer");
 			header("Content-Disposition: attachment; filename=$fileName");
 			header("Content-Type: application/csv;");
-			$file = fopen('php://output', 'w');
+			$fileCSV = fopen('php://output', 'w');
 			$header = array("flow_rate", "total_pos_flow", "signal_strength", "update_date");
-			//fputcsv($file, $header);
-			fputcsv($file, $header);
-			foreach ($filterOrders as $order) {
-				$orderData = array(
-					$order["flow_rate"],
-					$order["total_pos_flow"],
-					$order["signal_strength"],
-					$order["update_date"]
+			fputcsv($fileCSV, $header);
+			foreach ($filterRows as $rows) {
+				$deviceLogData = array(
+					$rows["flow_rate"],
+					$rows["total_pos_flow"],
+					$rows["signal_strength"],
+					$rows["update_date"]
 				);
-				fputcsv($file, $orderData);
+				fputcsv($fileCSV, $deviceLogData);
 			}
-			fclose($file);
+			fclose($fileCSV);
 			exit;
 		} else {
 			$noResult = '<label class="text-danger">There are no records within this date range to export. Please choose a different date range.</label>';
