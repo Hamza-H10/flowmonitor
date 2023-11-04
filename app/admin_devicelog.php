@@ -10,11 +10,12 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 ?>
 <?php
-include_once('export.php');
+// include_once('export.php');
 
-downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_id ?>&pgno=",
+// Set the $redirect variable
+// $redirect = "history_download";
 ?>
-
+ <!-- downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_id ?>"; -->
 <!-- ----------------------- -->
 <!-- the date buttons will style from bootstrappcdn library but enabling this delete function is not working fix this. -->
 
@@ -170,6 +171,7 @@ downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_i
             }
           }
         </style>
+ <!-- -------------------------------------------------------        -->
         <br>
         <div class="row">
           <form method="post">
@@ -189,7 +191,6 @@ downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_i
             </div>
           </form>
         </div>
-
         <div class="row">
           <div class="col-md-8">
             <?php echo $noResult; ?>
@@ -199,6 +200,38 @@ downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_i
       </div>
     </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("form").on("submit", function(event){
+    event.preventDefault();
+
+    var fromDate = $("input[name='fromDate']").val();
+    var toDate = $("input[name='toDate']").val();
+
+    var downloadUrl = "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_id ?>";
+
+    $.ajax({
+      url: downloadUrl,
+      type: 'post',
+      data: {fromDate: fromDate, toDate: toDate,
+      export: $("input[name='export']").val()},
+      success: function(response){
+        // Handle the response from the server
+      }
+    })
+    .fail(function(jqXHR, textStatus, errorThrown){
+      // This function will be executed if the AJAX request fails
+      if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
+    alert(jqXHR.responseJSON.error);
+  } else {
+      alert("An error occurred: " + textStatus + " " + errorThrown);}
+    });
+  });
+});
+</script>
+
+<!-- -------------------------------------------------------------- -->
     <div class="five wide column right floated right aligned">
       <div class="ui icon input">
         <input type="text" placeholder="Search..." id="table1_search">
@@ -230,7 +263,7 @@ downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_i
 <script src="js/tabulation.js"></script>
 
 <script>
-  downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_id ?>&pgno=";
+  //downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_id ?>&pgno=";
 
   var table1 = new Tabulation({
     apiUrl: "<?= $app_root ?>/api/?function=device_history&device_id=<?= $d_id ?>&pgno=", //apiUrl is a property
@@ -292,5 +325,4 @@ downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_i
   });
 </script>
 </body>
-
 </html>

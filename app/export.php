@@ -1,6 +1,5 @@
 <?php
 
-
 try {
 	$conn1 = new PDO("mysql:host=localhost;dbname=flowmeter_db", "root", "");
 	$conn1->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

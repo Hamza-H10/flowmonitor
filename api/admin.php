@@ -444,6 +444,8 @@ switch ($redirect) {
             }
         }
         break;
+        // Set the $redirect variable
+// $redirect = "history_download";
 
     case "history_delete":
         // Get the ID(s) to be deleted
@@ -466,35 +468,32 @@ switch ($redirect) {
             break;
         }
 
-        // -------------------------
+        // -----------------------------------------------------------
         //switch($redirect) {
     case "history_download":
 
-        $search_text = " WHERE device_id=$d_id ";  // *** remove WHERE clause if main query includes it
+        $search_text = " WHERE device_id=$d_id ";  // *** 
         $stmt = $database->execute("SELECT COUNT(*) AS total_records FROM history $search_text");
         $num = $stmt->rowCount();
-
+    
         $startDateMessage = '';
         $endDateMessage = '';
         $noResult = '';
-
-        if (isset($_POST["export"])) {
-            if (empty($_POST["fromDate"])) {
-                $startDateMessage = '<label class="text-danger">Select start date.</label>';
-            } else if (empty($_POST["toDate"])) {
-                $endDate = '<label class="text-danger">Select end date.</label>';
-            } else {
+    
+        // Check if the request is an AJAX request
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            if (isset($_POST["fromDate"]) && isset($_POST["toDate"])) {
                 $fromDate = $_POST["fromDate"];
                 $toDate = $_POST["toDate"];
-
+                                
                 $query = "SELECT * FROM history WHERE update_date >= :fromDate AND update_date <= :toDate ORDER BY update_date DESC";
-                // $stmt = $conn1->prepare($query);
+                
                 $stmt = $conn1->prepare($query);
                 $stmt->bindParam(":fromDate", $fromDate);
                 $stmt->bindParam(":toDate", $toDate);
                 $stmt->execute();
                 $filterRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    
                 if (count($filterRows)) {
                     $fileName = "DeviceLog_export_" . date('Ymd') . ".csv";
                     header("Content-Description: File Transfer");
@@ -515,12 +514,21 @@ switch ($redirect) {
                     fclose($fileCSV);
                     exit;
                 } else {
-                    $noResult = '<label class="text-danger">There are no records within this date range to export. Please choose a different date range.</label>';
+                    // Send a JSON response if there are no records
+                    header('Content-Type: application/json');
+                    echo json_encode(array('error' => 'There are no records within this date range to export. Please choose a different date range.'));
+                    exit;
                 }
+            } else {
+                // Send a JSON response if fromDate or toDate is not set
+                header('Content-Type: application/json');
+                echo json_encode(array('error' => 'fromDate or toDate is not set.'));
+                exit;
             }
         }
         break;
-        // --------------------------------
+            
+        // ------------------------------------------------------------
 
     case "device_history":
         $page_limit = 10;

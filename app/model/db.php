@@ -45,19 +45,19 @@ class Database
         return $this->conn->lastInsertId();
     }
 
-    // public function execute2($query, $params = array())
-    // {
-    //     $stmt = $this->conn->prepare($query);
-    //     // If parameters are provided,
-    //     // bind them to the statement
-    //     if (!empty($params)) {
-    //         foreach ($params as $key => &$val) {
-    //             $stmt->bindParam(":$key", $val);
-    //         }
-    //     }
-    //     $stmt->execute();
-    //     return $stmt;
-    // }
+    public function execute2($query, $params = array())
+    {
+        $stmt = $this->conn->prepare($query);
+        // If parameters are provided,
+        // bind them to the statement
+        if (!empty($params)) {
+            foreach ($params as $key => &$val) {
+                $stmt->bindParam(":$key", $val);
+            }
+        }
+        $stmt->execute();
+        return $stmt;
+    }
 }
 function hashPassword($password)
 {
