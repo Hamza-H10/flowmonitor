@@ -8,12 +8,6 @@ try {
 	die("Connection failed: " . $e->getMessage());
 }
 
-// retrieve our table contents
-if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-	$device_name = $row["device_friendly_name"];
-	$device_number = $row["device_number"];
-}
-
 $startDateMessage = '';
 $endDateMessage = '';
 $noResult = '';

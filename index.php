@@ -1,4 +1,3 @@
-
 <?php
 // Start a new or resume the existing session.
 session_start();
@@ -7,7 +6,7 @@ session_start();
 require_once './app/model/db.php';
 
 // Get the 'page' and 'action' parameters from the request.
-$redirect = getValue("page", false, "home");//the default value of the page parameter is set to "home" if it is not provided or is false.
+$redirect = getValue("page", false, "home"); //the default value of the page parameter is set to "home" if it is not provided or is false.
 $page_action = getValue("action", false, null);
 
 // Check if a user session is already active.
@@ -68,6 +67,10 @@ if ($page_action == "login") {
 // Include the header file.
 require "./app/header.php";
 
+// -----------------------
+$page_open = "./app/page_" . $redirect . ".php";
+// -----------------------
+
 if ($logged_in == true) {
     if ($session_user_type == 1) {
         $page_open = "./app/admin_" . $redirect . ".php";
@@ -78,7 +81,7 @@ if ($logged_in == true) {
             die("Invalid link specified");
         }
     } elseif ($session_user_type == 2) {
-        echo "<div id='positive_message'></div>";//providing message to the users interface
+        echo "<div id='positive_message'></div>"; //providing message to the users interface
         echo "<div id='error_message'></div>";
 
         $page_open = "./app/page_" . $redirect . ".php";

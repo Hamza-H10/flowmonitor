@@ -474,44 +474,50 @@ switch ($redirect) {
         $stmt = $database->execute("SELECT COUNT(*) AS total_records FROM history $search_text");
         $num = $stmt->rowCount();
 
-        if ($num) {
-            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            // Set the content type for a file download
-            $fileName = "DeviceLog_export_" . date('Ymd') . ".csv";
-            header('Content-Type: text/csv');
-            header("Content-Disposition: attachment; filename=$fileName");
-            header("Content-Type: application/csv;");
-            // header('Pragma: no-cache');
-            // header('Expires: 0');
-            // Open a new output stream for the CSV file
-            $output = fopen('php://output', 'w');
-            $header = array("flow_rate", "total_pos_flow", "signal_strength", "update_date");
+        $startDateMessage = '';
+        $endDateMessage = '';
+        $noResult = '';
 
-            if ($output && $rows) {
-                // Write the CSV header (column names)
-                fputcsv($output, array_keys($rows[0]));
-                $headerData = array(
-                    $order["flow_rate"],
-                    $order["total_pos_flow"],
-                    $order["signal_strength"],
-                    $order["update_date"]
-                );
-                // Write each row to the CSV file
-                foreach ($rows as $row) {
-                    fputcsv($output, $headerData);
-                }
-                fclose($output);
+        if (isset($_POST["export"])) {
+            if (empty($_POST["fromDate"])) {
+                $startDateMessage = '<label class="text-danger">Select start date.</label>';
+            } else if (empty($_POST["toDate"])) {
+                $endDate = '<label class="text-danger">Select end date.</label>';
             } else {
-                http_response_code(500); // Internal Server Error
-                echo json_encode(
-                    array("message" => "Error generating CSV file.", "records" => null)
-                );
+                $fromDate = $_POST["fromDate"];
+                $toDate = $_POST["toDate"];
+
+                $query = "SELECT * FROM history WHERE update_date >= :fromDate AND update_date <= :toDate ORDER BY update_date DESC";
+                // $stmt = $conn1->prepare($query);
+                $stmt = $conn1->prepare($query);
+                $stmt->bindParam(":fromDate", $fromDate);
+                $stmt->bindParam(":toDate", $toDate);
+                $stmt->execute();
+                $filterRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                if (count($filterRows)) {
+                    $fileName = "DeviceLog_export_" . date('Ymd') . ".csv";
+                    header("Content-Description: File Transfer");
+                    header("Content-Disposition: attachment; filename=$fileName");
+                    header("Content-Type: application/csv;");
+                    $fileCSV = fopen('php://output', 'w');
+                    $header = array("flow_rate", "total_pos_flow", "signal_strength", "update_date");
+                    fputcsv($fileCSV, $header);
+                    foreach ($filterRows as $rows) {
+                        $deviceLogData = array(
+                            $rows["flow_rate"],
+                            $rows["total_pos_flow"],
+                            $rows["signal_strength"],
+                            $rows["update_date"]
+                        );
+                        fputcsv($fileCSV, $deviceLogData);
+                    }
+                    fclose($fileCSV);
+                    exit;
+                } else {
+                    $noResult = '<label class="text-danger">There are no records within this date range to export. Please choose a different date range.</label>';
+                }
             }
-        } else {
-            http_response_code(400);
-            echo json_encode(
-                array("message" => "No records found for download.", "records" => null)
-            );
         }
         break;
         // --------------------------------
