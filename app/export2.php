@@ -3,7 +3,7 @@
 include_once("app/model/db.php");
 $database = new Database();
 $query = "SELECT * FROM history ORDER BY update_date DESC";
-$results = $database->execute($query);
+$results = $database->execute2($query);
 $allorders = array();
 while ($order = $results->fetch(PDO::FETCH_ASSOC)) {
     $allorders[] = $order;
@@ -22,7 +22,7 @@ if (isset($_POST["export"])) {
         $query = "SELECT * FROM history WHERE update_date >= ? AND update_date <= ? ORDER BY update_date DESC";
         //$params = array($_POST["fromDate"], $_POST["toDate"]);
         $params = array(":fromDate" => $_POST["fromDate"], ":toDate" => $_POST["toDate"]);
-        $orderResult = $database->execute($query);//use the execute method from the database class 
+        $orderResult = $database->execute2($query); //use the execute method from the database class 
         $filterorders = $orderResult->fetchAll(PDO::FETCH_ASSOC);
 
         if (count($filterorders)) {
@@ -34,10 +34,12 @@ if (isset($_POST["export"])) {
             $header = array("flow rate", "total_pos_flow", "signal strength", "update_date");
             fputcsv($file, $header);
             foreach ($filterorders as $order) {
-                $orderData = array($order["Flow rate"],
-                            $order["total_pos_flow"],
-                            $order["signal strength"],
-                            $order["update_date"]);
+                $orderData = array(
+                    $order["Flow rate"],
+                    $order["total_pos_flow"],
+                    $order["signal strength"],
+                    $order["update_date"]
+                );
                 fputcsv($file, $orderData);
             }
             fclose($file);
@@ -47,4 +49,3 @@ if (isset($_POST["export"])) {
         }
     }
 }
-?>

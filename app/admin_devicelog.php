@@ -10,7 +10,7 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 ?>
 <?php
-include_once('export.php');
+include_once('export.php'); //there are export.php file and export2.php file. mention either of them here.
 //include('inc/db_connect.php'); // Include your PDO database connection code
 ?>
 
