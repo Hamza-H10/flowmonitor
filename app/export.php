@@ -10,7 +10,6 @@ try {
 	die("Connection failed: " . $e->getMessage());
 }
 
-
 $startDateMessage = '';
 $endDateMessage = '';
 $noResult = '';
