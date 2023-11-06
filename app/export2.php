@@ -1,6 +1,8 @@
 <?php
 //in this the database is connected from a database instance of the database class 
-include_once("app/model/db.php");
+// include_once("app/model/db.php");//check the error and compare with the below path error in the browser 
+require_once('model/db.php');//compare the above path with this
+
 $database = new Database();
 $query = "SELECT * FROM history ORDER BY update_date DESC";
 $results = $database->execute($query);
