@@ -10,10 +10,9 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 ?>
 <?php
-include_once('export3.php'); //there are export.php file and export2.php file. mention either of them here.
+include_once('export.php');
 //include('inc/db_connect.php'); // Include your PDO database connection code
 ?>
-
 <!-- ----------------------- -->
 <!-- the date buttons will style from bootstrappcdn library but enabling this delete function is not working fix this. -->
 
