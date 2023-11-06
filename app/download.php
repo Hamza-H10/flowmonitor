@@ -1,10 +1,10 @@
 <?php
 
-require_once 'C:\xampp\htdocs\flowmonitor\app\model\db.php';
+// require_once 'C:\xampp\htdocs\flowmonitor\app\model\db.php';
 // require_once 'app\model\db.php';//The Download Function is not working when the relative path is used Fix this.
 // require_once __DIR__ . '/app/model/db.php';
 // require_once 'model/db.php';
-
+require_once('model/db.php');
 
 function downloadCSV() {
     $database = new Database();
