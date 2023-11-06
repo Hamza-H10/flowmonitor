@@ -9,6 +9,16 @@
         $device_number = $row["device_number"];
     }
 ?>
+<!-- ------------------------------------------ -->
+<?php
+try {
+    $conn1 = new PDO("mysql:host=localhost;dbname=flowmeter_db", "root", "");
+    $conn1->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
+}
+?>
+<!-- ------------------------------------------ -->
 <div class="ui main container">
 
 <h3 class="ui center aligned header">
@@ -83,26 +93,43 @@
         <button class="ui circular negative icon button" id="table1_delete" >
           <i class="trash alternate icon"></i>
         </button>
-       <!-- From Date -->
-    <div class="ui calendar" id="fromDate">
-        <div class="ui input left icon">
-            <i class="calendar icon"></i>
-            <input type="date" placeholder="From Date">
-        </div>
-    </div>
-    <!-- To Date -->
-    <div class="ui calendar" id="toDate">
-        <div class="ui input left icon">
-            <i class="calendar icon"></i>
-            <input type="date" placeholder="To Date">
-        </div>
-    </div>
-<!-- Download Button --><button class="ui circular primary icon button" id="download">
-    <i class="download icon"></i> Download
-</button>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
 
+      <div class="second-eleven-wide-column">
+              <style>
+                @media (max-width: 768px) {
+
+                  .eleven-wide-column,
+                  .second-eleven-wide-column {
+                    width: 100%;
+                  }
+                }
+              </style>
+        <br>
+        <div class="row">
+            <!-- From Date -->
+          <div class="ui calendar" id="fromDate">
+              <div class="ui input left icon">
+                  <i class="calendar icon"></i>
+                  <input type="date" placeholder="From Date">
+              </div>
+          </div>
+          <!-- To Date -->
+          <div class="ui calendar" id="toDate">
+              <div class="ui input left icon">
+                  <i class="calendar icon"></i>
+                  <input type="date" placeholder="To Date">
+              </div>
+          </div>
+      <!-- Download Button --><button class="ui circular primary icon button" id="download">
+          <i class="download icon"></i> Download
+      </button>
+        </div>
+      </div>
+      <br/>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
     // Add an event listener to the download button
     document.getElementById("download").addEventListener("click", function () {
         // Display a message on the user interface
@@ -143,7 +170,7 @@ $.ajax({
 });
     });
 </script>
-
+<!-- ----------------------------------------- -->
 
       <div class="five wide column right floated right aligned">
         <div class="ui icon input">
@@ -237,13 +264,9 @@ $.ajax({
           }
         });
     });
-// --------------    
-
-// ------------------
-
-
+// -----------------    
+// -----------------
 </script>
-
-  </script>
+</script>
 </body>  
 </html>

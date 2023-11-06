@@ -106,9 +106,9 @@
             
                     TableToExcel.convert(table[1], { // html code may contain multiple tables so here we are refering to 1st table tag
                        name: `deviceLog.xlsx`, // fileName you could use any name
-                       sheet: {
+                      sheet: {
                           name: 'Sheet 1' // sheetName
-                       }
+                      }
                     });
             
                 }
@@ -124,7 +124,6 @@
             
         });
     });
-
   </script>
 </body>  
 </html>
