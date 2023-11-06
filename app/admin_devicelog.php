@@ -98,10 +98,11 @@
         </div>
     </div>
 <!-- Download Button --><button class="ui circular primary icon button" id="download">
-    <i class="download icon"></i> Download
+    <i class="download icon"></i> Download
 </button>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
     // Add an event listener to the download button
     document.getElementById("download").addEventListener("click", function () {
         // Display a message on the user interface
@@ -140,7 +141,7 @@ $.ajax({
         message.remove();
     }
 });
-    });
+    });
 </script>
 
 
@@ -181,8 +182,7 @@ $.ajax({
             selectMulti: true,
             });
 
-//fetchUrl: "<?=$app_root?>/api/?function=history_fetch",
-        
+            
     $(function() {
         $('.selection.dropdown').dropdown();
         $('.ui.checkbox').checkbox();
@@ -238,28 +238,7 @@ $.ajax({
         });
     });
 // --------------    
-    function downloadCSV() {
-    
-        var tabulationData = table1.getData();
 
-        // Create a CSV string from the tabulation data
-        var csv = "Flow Rate (Cubic Meter/ Hour),Total Pos Flow (Cubic Meter),Signal Strength,Update Date\n"; // Replace with your column headers
-        
-        for (var i = 0; i < tabulationData.length; i++) {
-            var row = tabulationData[i];
-            csv += row.column1 + "," + row.column2 + "," + row.column3 + "\n"; // Replace with your row data
-        }
-        // Create a Blob object from the CSV string
-        var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-        
-        // Create a temporary download link
-        var link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "Device_data.csv"; // Replace with your desired file name
-
-        // Trigger the download
-        link.click();
-    }
 // ------------------
 
 
