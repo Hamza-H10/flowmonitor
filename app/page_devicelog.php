@@ -24,40 +24,44 @@
           <i class="file excel icon"></i>
         </button>
         <!-- <h2 class="ui header">User List</h2> -->
-
-      </div>
-      <div class="five wide column right floated right aligned">
-        <div class="ui icon input">
-          <input type="text" placeholder="Search..." id="table1_search">
-          <i class="circular delete link icon" id="table1_clear_btn"></i>
-          <i class="inverted circular search link icon" id="table1_search_btn"></i>
-        </div>        
-      </div>
-      <div id="table1_datawindow" class="table_datawindow"></div>
-      <!-- <div class="content" id="info"></div> -->
-      <div id="table1_pagination" class="eleven wide column"></div>
-      <div class="five wide column right floated right aligned">
-        <h4 class="ui right floated">
-          <div class="content" id="table1_info"></div>
-        </h4>
-      </div>
-      <div id="Div_exceltable" style="display:none"></div>
-    </div>
-  </div>
-
-  <script src="js/jquery-3.3.1.min.js"></script>
-  <script src="js/tableToExcel.js"></script>
-  <script src="js/semantic.min.js"></script>
-  <script src="js/pagination.js"></script>
-  <script src="js/tabulation.js"></script>
-  <script>
-    var table1= new Tabulation({
-            apiUrl: "<?=$app_root?>/api/?function=device_history&device_id=<?=$d_id?>&pgno=",
-            fetchUrl:"<?=$app_root?>/api/?function=user_fetch&row_id=",
-            delete: false, edit: false, selectMulti: false,
-            });
-
-    $(function() {
+<!-- ------------------------------------------------------------ -->
+<br>        
+<div class="row">
+            <!-- From Date -->
+          <div class="ui calendar" id="fromDate">
+              <div class="ui input left icon">
+                  <i class="calendar icon"></i>
+                  <input type="date" placeholder="From Date">
+              </div>
+          </div>
+          <!-- To Date -->
+          <div class="ui calendar" id="toDate">
+              <div class="ui input left icon">
+                  <i class="calendar icon"></i>
+                  <input type="date" placeholder="To Date">
+              </div>
+          </div>
+      <!-- Download Button --><button class="ui circular primary icon button" id="download">
+          <i class="download icon"></i> Download
+      </button>
+        </div>
+        </div>
+        <br/>
+        <!-- <div class="second-eleven-wide-column">
+              <style>
+                @media (max-width: 768px) {
+                  .eleven-wide-column,
+                  .second-eleven-wide-column {
+                    width: 100%;
+                  }
+                } */
+              </style>
+        
+      </div> -->
+      
+<!-- ----------------------------------------- -->
+    <script>
+          $(function() {
         $('.selection.dropdown').dropdown();
         $('.ui.checkbox').checkbox();
         $('.ui.indicating.progress').progress();
@@ -120,10 +124,46 @@
                 table_output = "<table class='ui celled compact striped teal table'><tr><td class='center aligned'>No records found</td></tr></table>";
     
                 $('#Div_exceltable').html(table_output);
-            });
-            
+            });  
         });
     });
+
+        </script>
+
+<!-- ---------------------------------------- -->
+      
+      <div class="five wide column right floated right aligned">
+        <div class="ui icon input">
+          <input type="text" placeholder="Search..." id="table1_search">
+          <i class="circular delete link icon" id="table1_clear_btn"></i>
+          <i class="inverted circular search link icon" id="table1_search_btn"></i>
+        </div>        
+      </div>
+      <div id="table1_datawindow" class="table_datawindow"></div>
+      <!-- <div class="content" id="info"></div> -->
+      <div id="table1_pagination" class="eleven wide column"></div>
+      <div class="five wide column right floated right aligned">
+        <h4 class="ui right floated">
+          <div class="content" id="table1_info"></div>
+        </h4>
+      </div>
+      <div id="Div_exceltable" style="display:none"></div>
+    </div>
+  </div>
+
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/tableToExcel.js"></script>
+  <script src="js/semantic.min.js"></script>
+  <script src="js/pagination.js"></script>
+  <script src="js/tabulation.js"></script>
+  <script>
+    var table1= new Tabulation({
+            apiUrl: "<?=$app_root?>/api/?function=device_history&device_id=<?=$d_id?>&pgno=",
+            fetchUrl:"<?=$app_root?>/api/?function=user_fetch&row_id=",
+            delete: false, edit: false, selectMulti: false,
+            });
+
+    
   </script>
 </body>  
 </html>
