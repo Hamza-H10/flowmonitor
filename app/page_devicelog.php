@@ -18,48 +18,107 @@
 
   <!-- DATA LIST -->
 
+  
+
     <div class="ui grid ">
       <div class="eleven wide column">
-        <button class="ui circular black icon button" id="btnExport" >
-          <i class="file excel icon"></i>
+        <button class="ui circular primary icon button" id="btnExport" >
+          <i class="file excel icon"></i> Export
         </button>
         <!-- <h2 class="ui header">User List</h2> -->
 <!-- ------------------------------------------------------------ -->
-<br>        
-<div class="row">
-            <!-- From Date -->
-          <div class="ui calendar" id="fromDate">
-              <div class="ui input left icon">
-                  <i class="calendar icon"></i>
-                  <input type="date" placeholder="From Date">
-              </div>
+       
+        <div class="row">
+            <div class="ui calendar" id="fromDate">
+                <div class="ui input left icon">
+                    <i class="calendar icon"></i>
+                    <input type="date" placeholder="From Date"> From Date
+                </div>
+            </div>
+            <div class="ui calendar" id="toDate">          
+                <div class="ui input left icon">
+                    <i class="calendar icon"></i>
+                    <input type="date" placeholder="To Date" > To Date                
+                </div>
+            </div>
           </div>
-          <!-- To Date -->
-          <div class="ui calendar" id="toDate">
-              <div class="ui input left icon">
-                  <i class="calendar icon"></i>
-                  <input type="date" placeholder="To Date">
-              </div>
-          </div>
-      <!-- Download Button --><button class="ui circular primary icon button" id="download">
-          <i class="download icon"></i> Download
-      </button>
         </div>
-        </div>
-        <br/>
-        <!-- <div class="second-eleven-wide-column">
-              <style>
-                @media (max-width: 768px) {
-                  .eleven-wide-column,
-                  .second-eleven-wide-column {
-                    width: 100%;
-                  }
-                } */
-              </style>
         
-      </div> -->
-      
 <!-- ----------------------------------------- -->
+
+<script>
+  $(function() {
+        $("#btnExport").click(function() {
+
+        // Get the selected date values from the input fields
+        var fromDate = $("#fromDate input").val();
+        var toDate = $("#toDate input").val();
+
+        // Prepare the URL based on whether date range is provided
+        var exportUrl = "<?=$app_root?>/api/?function=device_history_print&device_id=<?=$d_id?>";
+        if (fromDate && toDate) {
+            // If both dates are provided, add them as query parameters
+            exportUrl += "&fromDate=" + fromDate + "&toDate=" + toDate;
+        }
+
+// $.get("<?=$app_root?>/api/?function=device_history_print&device_id=<?=$d_id?>", function(data, status) {
+  $.get(exportUrl, function(data, status) {  
+  if(status == 'success') {
+
+        var myObj = JSON.parse(data);
+        var table_output = '';
+        var key_names;
+        var className = ''; 
+        let re = /_/g;
+        var table_output = "<table class='ui celled compact striped teal table'><thead><tr>";
+
+        if(myObj.records.length > 0) {
+            key_names = Object.keys(myObj.records[0]);
+            for(var ai = 1; ai < key_names.length; ai++) {
+                if(myObj.text_align)
+                    className = " class='"+myObj.text_align[ai]+" aligned'";
+
+                table_output += "<th"+className+">" + key_names[ai].replace(re, ' ').ucwords() + "</th>";
+            }
+        }
+        table_output += "</tr></thead><tbody>";
+        $.each(myObj.records, function (val) {
+            className = ''; 
+            
+            table_output += "<tr>";
+            
+            for(var inx = 1; inx < key_names.length; inx++) {
+                if(myObj.text_align)
+                    className = " class='"+myObj.text_align[inx]+" aligned'";
+                table_output += "<td"+className+">"+myObj.records[val][key_names[inx]]+"</td>";
+            }
+            table_output += "</tr>";
+        });
+        table_output += "</tbody></table>";
+
+        $('#Div_exceltable').html(table_output);
+        let table = document.getElementsByTagName("table");
+
+        TableToExcel.convert(table[1], { // html code may contain multiple tables so here we are refering to 1st table tag
+           name: `deviceLog.xlsx`, // fileName you could use any name
+          sheet: {
+              name: 'Sheet 1' // sheetName
+          }
+        });
+    }
+    else {
+        // error message print
+    }
+}).fail(function() {
+    var table_output, myObj;
+    table_output = "<table class='ui celled compact striped teal table'><tr><td class='center aligned'>No records found</td></tr></table>";
+
+    $('#Div_exceltable').html(table_output);
+});  
+});
+});
+</script>
+
     <script>
           $(function() {
         $('.selection.dropdown').dropdown();
@@ -69,65 +128,8 @@
 
         //table1.init();
         table1.loadPage(1, true);
-        $("#btnExport").click(function() {
-
-            $.get("<?=$app_root?>/api/?function=device_history_print&device_id=<?=$d_id?>", function(data, status) {
-                if(status == 'success') {
-    
-                    var myObj = JSON.parse(data);
-                    var table_output = '';
-                    var key_names;
-                    var className = ''; 
-                    let re = /_/g;
-                    var table_output = "<table class='ui celled compact striped teal table'><thead><tr>";
-    
-                    if(myObj.records.length > 0) {
-                        key_names = Object.keys(myObj.records[0]);
-                        for(var ai = 1; ai < key_names.length; ai++) {
-                            if(myObj.text_align)
-                                className = " class='"+myObj.text_align[ai]+" aligned'";
-    
-                            table_output += "<th"+className+">" + key_names[ai].replace(re, ' ').ucwords() + "</th>";
-                        }
-                    }
-                    table_output += "</tr></thead><tbody>";
-                    $.each(myObj.records, function (val) {
-                        className = ''; 
-                        
-                        table_output += "<tr>";
-                        
-                        for(var inx = 1; inx < key_names.length; inx++) {
-                            if(myObj.text_align)
-                                className = " class='"+myObj.text_align[inx]+" aligned'";
-                            table_output += "<td"+className+">"+myObj.records[val][key_names[inx]]+"</td>";
-                        }
-                        table_output += "</tr>";
-                    });
-                    table_output += "</tbody></table>";
-    
-                    $('#Div_exceltable').html(table_output);
-                    let table = document.getElementsByTagName("table");
-            
-                    TableToExcel.convert(table[1], { // html code may contain multiple tables so here we are refering to 1st table tag
-                       name: `deviceLog.xlsx`, // fileName you could use any name
-                      sheet: {
-                          name: 'Sheet 1' // sheetName
-                      }
-                    });
-            
-                }
-                else {
-                    // error message print
-                }
-            }).fail(function() {
-                var table_output, myObj;
-                table_output = "<table class='ui celled compact striped teal table'><tr><td class='center aligned'>No records found</td></tr></table>";
-    
-                $('#Div_exceltable').html(table_output);
-            });  
-        });
+   
     });
-
         </script>
 
 <!-- ---------------------------------------- -->

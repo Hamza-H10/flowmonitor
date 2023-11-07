@@ -149,30 +149,48 @@
             }
         
             break;
+//  -------------------------------------------------           
         case "device_history_print":
             $d_id = getValue("device_id");
-            $unit_flow = ""; $unit_totalizer = "";
+            $unit_flow = "";
+            $unit_totalizer = "";
             getunit($d_id, $unit_flow, $unit_totalizer);
 
-            $search_text = " WHERE device_id=$d_id ";  // *** remove WHERE clause if main query includes it
+            // Initialize the search conditions
+            $search_conditions = "WHERE device_id = $d_id";
 
-            $stmt = $database->execute("SELECT id as row_id, flow_rate, total_pos_flow, signal_strength, update_date FROM history $search_text ORDER BY update_date DESC, update_time DESC");
+            // Check if a date range is provided
+            if (isset($_GET['fromDate']) && isset($_GET['toDate'])) {
+                $fromDate = $_GET['fromDate'];
+                $toDate = $_GET['toDate'];
+
+                 // Validate the date range format using DateTime
+                $fromDateTime = DateTime::createFromFormat('Y-m-d', $fromDate);
+                $toDateTime = DateTime::createFromFormat('Y-m-d', $toDate);
+
+
+                // Validate the date range format (you may want to add further validation)
+                if ($fromDateTime && $toDateTime) {
+                    $fromDate = $fromDateTime->format('Y-m-d');
+                    $toDate = $toDateTime->format('Y-m-d');
+                    // Add date range conditions to the query
+                    $search_conditions .= " AND update_date >= '$fromDate' AND update_date <= '$toDate'";
+                }
+            }
+
+            $stmt = $database->execute("SELECT id as row_id, flow_rate, total_pos_flow, signal_strength, update_date FROM history $search_conditions ORDER BY update_date DESC, update_time DESC");
             $num = $stmt->rowCount();
-            
-            if($num > 0){
-            
-                $results_arr["records"]=array();
-                $results_arr["text_align"]=array('', 'right', 'right', 'center', 'center');
-                //$curtime = time();
-                
-                // retrieve our table contents
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-                    //$last_update = getTimeText($row['date_time'], $curtime);
-            
-                    $alert_item=array(
+
+            if ($num > 0) {
+                $results_arr["records"] = array();
+                $results_arr["text_align"] = array('', 'right', 'right', 'center', 'center');
+
+                // Retrieve our table contents
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $alert_item = array(
                         "row_id" => $row['row_id'],
-                        "flow_rate_(".$unit_flow.")" => $row['flow_rate'],
-                        "total_pos_flow_(".$unit_totalizer.")" => $row['total_pos_flow'],
+                        "flow_rate_(" . $unit_flow . ")" => $row['flow_rate'],
+                        "total_pos_flow_(" . $unit_totalizer . ")" => $row['total_pos_flow'],
                         "signal_strength" => $row['signal_strength'],
                         "update_date" => date("d/m/Y", strtotime($row['update_date'])),
                     );
@@ -181,24 +199,23 @@
                 }
 
                 $results_arr["page_limit"] = $num;
-                // set response code - 200 OK
+
+                // Set response code - 200 OK
                 http_response_code(200);
-                
-                // show products data in json format
+
+                // Show products data in JSON format
                 echo json_encode($results_arr);
-            }        
-            else {
-            
-                // set response code - 404 Not found
+            } else {
+                // Set response code - 404 Not found
                 http_response_code(404);
-                
-                // tell the user no products found
+                // Tell the user no products found
                 echo json_encode(
                     array("message" => "No history found.", "records" => null)
                 );
             }
-        
-            break;        
+            break;
+
+// ----------------------------------------------                  
         default:
             // set response code - 404 Not found
             http_response_code(404);
@@ -207,7 +224,6 @@
             echo json_encode(
                 array("message" => "Invalid Link Specified.", "records" => null)
             );
-        
     }
 /**
  * This code retrieves data from the database based on the provided redirect parameter.
@@ -215,5 +231,4 @@
  * The retrieved data is then formatted and returned as JSON.
  * If no data is found, appropriate error messages are returned.
  */
-
 ?>
