@@ -7,15 +7,16 @@ try {
 }
 
 // --------------------------------------------
-$d_id = getValue('device_id', false, 0);
-$database = new Database();
-$stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
+//to get the history logs of specific device Id. 
+// $d_id = getValue('device_id', false, 0);
+// $database = new Database();
+// $stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
 
-// retrieve our table contents
-if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-  $device_name = $row["device_friendly_name"];
-  $device_number = $row["device_number"];
-}
+// // retrieve our table contents
+// if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+//   $device_name = $row["device_friendly_name"];
+//   $device_number = $row["device_number"];
+// }
 // --------------------------------------------
 
 function downloadCSV() {
@@ -37,7 +38,7 @@ function downloadCSV() {
         $output = fopen('php://output', 'w');
 
         // Define the headers exactly as in the provided code
-        $header = array("flow_rate(M3/hr)", "total_pos_flow", "signal_strength", "update_date");
+        $header = array("Flow Rate(M3/hr)", "Total Pos Flow(M3)", "Signal strength", "Update Date");
 
         if ($output && $rows) {
             // Write the CSV header (column names)
