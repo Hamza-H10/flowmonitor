@@ -15,10 +15,7 @@
 <?php if ($d_id) echo "Device history for $device_name ($device_number)"; ?>
 </h3>
 
-
   <!-- DATA LIST -->
-
-  
 
     <div class="ui grid ">
       <div class="eleven wide column">
@@ -30,25 +27,68 @@
        
         <div class="row">
             <div class="ui calendar" id="fromDate">
-                <div class="ui input left icon">
+                <div class="ui input left icon" data-tooltip="From Date">
                     <i class="calendar icon"></i>
-                    <input type="date" placeholder="From Date"> From Date
+                    <input type="date" placeholder="From Date">
                 </div>
             </div>
             <div class="ui calendar" id="toDate">          
-                <div class="ui input left icon">
+                <div class="ui input left icon" data-tooltip="To Date">
                     <i class="calendar icon"></i>
-                    <input type="date" placeholder="To Date" > To Date                
+                    <input type="date" placeholder="To Date">               
                 </div>
             </div>
           </div>
         </div>
         
+        
 <!-- ----------------------------------------- -->
+<!-- ---------------------------------------- -->
+      
+      <div class="five wide column right floated right aligned">
+        <div class="ui icon input">
+          <input type="text" placeholder="Search..." id="table1_search">
+          <i class="circular delete link icon" id="table1_clear_btn"></i>
+          <i class="inverted circular search link icon" id="table1_search_btn"></i>
+        </div>        
+      </div>
 
-<script>
-  $(function() {
-        $("#btnExport").click(function() {
+      <div style="color: Darkblue;">NOTE: To download all rows, export without selecting any date range.</div> 
+
+      <div id="table1_datawindow" class="table_datawindow"></div>
+      <!-- <div class="content" id="info"></div> -->
+      <div id="table1_pagination" class="eleven wide column"></div>
+      <div class="five wide column right floated right aligned">
+        <h4 class="ui right floated">
+          <div class="content" id="table1_info"></div>
+        </h4>
+      </div>
+      <div id="Div_exceltable" style="display:none"></div>
+    </div>
+  </div>
+
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/tableToExcel.js"></script>
+  <script src="js/semantic.min.js"></script>
+  <script src="js/pagination.js"></script>
+  <script src="js/tabulation.js"></script>
+  <script>
+    var table1= new Tabulation({
+            apiUrl: "<?=$app_root?>/api/?function=device_history&device_id=<?=$d_id?>&pgno=",
+            fetchUrl:"<?=$app_root?>/api/?function=user_fetch&row_id=",
+            delete: false, edit: false, selectMulti: false,
+            });
+
+    $(function() {
+        $('.selection.dropdown').dropdown();
+        $('.ui.checkbox').checkbox();
+        $('.ui.indicating.progress').progress();
+        $('#btnExport').popup({content : 'Export to Excel File.'}); 
+        // $('#fromDate').popup({content : 'fromDate.'});
+        //table1.init();
+            table1.loadPage(1, true);
+
+    $("#btnExport").click(function() {
 
         // Get the selected date values from the input fields
         var fromDate = $("#fromDate input").val();
@@ -61,9 +101,8 @@
             exportUrl += "&fromDate=" + fromDate + "&toDate=" + toDate;
         }
 
-// $.get("<?=$app_root?>/api/?function=device_history_print&device_id=<?=$d_id?>", function(data, status) {
-  $.get(exportUrl, function(data, status) {  
-  if(status == 'success') {
+        $.get(exportUrl, function(data, status) {  
+        if(status == 'success') {
 
         var myObj = JSON.parse(data);
         var table_output = '';
@@ -99,73 +138,28 @@
         $('#Div_exceltable').html(table_output);
         let table = document.getElementsByTagName("table");
 
-        TableToExcel.convert(table[1], { // html code may contain multiple tables so here we are refering to 1st table tag
-           name: `deviceLog.xlsx`, // fileName you could use any name
+        TableToExcel.convert(table[1], { // html code may contain multiple tables so here we are referring to 1st table tag
+          name: `deviceLog.xlsx`, // fileName you could use any name
           sheet: {
               name: 'Sheet 1' // sheetName
           }
         });
-    }
-    else {
+        }
+        else {
         // error message print
-    }
-}).fail(function() {
-    var table_output, myObj;
-    table_output = "<table class='ui celled compact striped teal table'><tr><td class='center aligned'>No records found</td></tr></table>";
+        }
+        }).fail(function() {
+        var table_output, myObj;
+        table_output = "<table class='ui celled compact striped teal table'><tr><td class='center aligned'>No records found</td></tr></table>";
 
-    $('#Div_exceltable').html(table_output);
-});  
-});
-});
-</script>
+        $('#Div_exceltable').html(table_output);
+        alert("An error occurred while fetching the data! Please check if the date range provided exist or not or else try again later.");
+        });  
+        });
+        });
+          
+  
 
-    <script>
-          $(function() {
-        $('.selection.dropdown').dropdown();
-        $('.ui.checkbox').checkbox();
-        $('.ui.indicating.progress').progress();
-        $('#btnExport').popup({content : 'Export to Excel format'});
-
-        //table1.init();
-        table1.loadPage(1, true);
-   
-    });
-        </script>
-
-<!-- ---------------------------------------- -->
-      
-      <div class="five wide column right floated right aligned">
-        <div class="ui icon input">
-          <input type="text" placeholder="Search..." id="table1_search">
-          <i class="circular delete link icon" id="table1_clear_btn"></i>
-          <i class="inverted circular search link icon" id="table1_search_btn"></i>
-        </div>        
-      </div>
-      <div id="table1_datawindow" class="table_datawindow"></div>
-      <!-- <div class="content" id="info"></div> -->
-      <div id="table1_pagination" class="eleven wide column"></div>
-      <div class="five wide column right floated right aligned">
-        <h4 class="ui right floated">
-          <div class="content" id="table1_info"></div>
-        </h4>
-      </div>
-      <div id="Div_exceltable" style="display:none"></div>
-    </div>
-  </div>
-
-  <script src="js/jquery-3.3.1.min.js"></script>
-  <script src="js/tableToExcel.js"></script>
-  <script src="js/semantic.min.js"></script>
-  <script src="js/pagination.js"></script>
-  <script src="js/tabulation.js"></script>
-  <script>
-    var table1= new Tabulation({
-            apiUrl: "<?=$app_root?>/api/?function=device_history&device_id=<?=$d_id?>&pgno=",
-            fetchUrl:"<?=$app_root?>/api/?function=user_fetch&row_id=",
-            delete: false, edit: false, selectMulti: false,
-            });
-
-    
   </script>
 </body>  
 </html>

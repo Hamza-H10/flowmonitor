@@ -200,13 +200,12 @@
 
                 $results_arr["page_limit"] = $num;
 
-                // Set response code - 200 OK
                 http_response_code(200);
 
                 // Show products data in JSON format
                 echo json_encode($results_arr);
             } else {
-                // Set response code - 404 Not found
+                
                 http_response_code(404);
                 // Tell the user no products found
                 echo json_encode(
