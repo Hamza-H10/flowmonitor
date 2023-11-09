@@ -74,7 +74,6 @@ try {
             </div>
               <?php 
                   echo "<input type='hidden' name='device_id' id='device_id' value='$d_id'>  ";
-    
               ?>
         </div>
 
@@ -93,40 +92,49 @@ try {
         <button class="ui circular negative icon button" id="table1_delete" >
           <i class="trash alternate icon"></i>
         </button>
-
-      <div class="second-eleven-wide-column">
-              <style>
-                @media (max-width: 768px) {
-
-                  .eleven-wide-column,
-                  .second-eleven-wide-column {
-                    width: 100%;
-                  }
-                }
-              </style>
-        <br>
-        <div class="row">
-            <!-- From Date -->
-          <div class="ui calendar" id="fromDate">
-              <div class="ui input left icon">
-                  <i class="calendar icon"></i>
-                  <input type="date" placeholder="From Date">
-              </div>
-          </div>
-          <!-- To Date -->
-          <div class="ui calendar" id="toDate">
-              <div class="ui input left icon">
-                  <i class="calendar icon"></i>
-                  <input type="date" placeholder="To Date">
-              </div>
-          </div>
-      <!-- Download Button --><button class="ui circular primary icon button" id="download">
-          <i class="download icon"></i> Download
-      </button>
         </div>
-      </div>
-      <br/>
 
+        <div class="five wide column right floated right aligned">
+        <div class="ui icon input">
+          <input type="text" placeholder="Search..." id="table1_search">
+          <i class="circular delete link icon" id="table1_clear_btn"></i>
+          <i class="inverted circular search link icon" id="table1_search_btn"></i>
+        </div>        
+      </div>
+
+      <!-- <div class="second-eleven-wide-column"> -->
+      <!-- <style>
+    .custom-row {
+        display: flex;
+        justify-content: center;
+    }
+    .custom-column {
+        width: 50%; /* Adjust the width value as per your requirement */
+    }
+</style> -->
+
+<div class="row custom-row">
+    <!-- From Date -->
+    <div class="ui calendar custom-column" id="fromDate">
+        <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="date" placeholder="From Date">
+        </div>
+    </div>
+    <!-- To Date -->
+    <div class="ui calendar custom-column" id="toDate">
+        <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="date" placeholder="To Date">
+        </div>
+    </div>
+    <!-- Download Button -->
+    <button class="ui circular primary icon button custom-column" id="download">
+        <i class="download icon"></i> Download
+    </button>
+</div>
+      <!-- </div> -->
+    
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -172,13 +180,8 @@ $.ajax({
 </script>
 <!-- ----------------------------------------- -->
 
-      <div class="five wide column right floated right aligned">
-        <div class="ui icon input">
-          <input type="text" placeholder="Search..." id="table1_search">
-          <i class="circular delete link icon" id="table1_clear_btn"></i>
-          <i class="inverted circular search link icon" id="table1_search_btn"></i>
-        </div>        
-      </div>
+      
+
       <div id="table1_datawindow" class="table_datawindow"></div>
       <!-- <div class="content" id="info"></div> -->
       <div id="table1_pagination" class="eleven wide column"></div>
@@ -187,7 +190,6 @@ $.ajax({
           <div class="content" id="table1_info"></div>
         </h4>
       </div>
-    </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

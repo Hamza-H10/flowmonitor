@@ -22,6 +22,8 @@
         <button class="ui circular primary icon button" id="btnExport" >
           <i class="file excel icon"></i> Export
         </button>
+        
+
         <!-- <h2 class="ui header">User List</h2> -->
 <!-- ------------------------------------------------------------ -->
        
@@ -42,8 +44,8 @@
         </div>
         
         
-<!-- ----------------------------------------- -->
-<!-- ---------------------------------------- -->
+<!-- -------------------------------------------- -->
+<!-- -------------------------------------------- -->
       
       <div class="five wide column right floated right aligned">
         <div class="ui icon input">
