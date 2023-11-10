@@ -12,10 +12,12 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 ?>
 <?php
-include_once('export.php');
-//include('inc/db_connect.php'); // Include your PDO database connection code
-?>
+// include_once('export.php');
 
+// Set the $redirect variable
+// $redirect = "history_download";
+?>
+ <!-- downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_id ?>"; -->
 <!-- ----------------------- -->
 <!-- the date buttons will style from bootstrappcdn library but enabling this delete function is not working fix this. -->
 
@@ -96,6 +98,71 @@ include_once('export.php');
         <i class="trash alternate icon"></i>
       </button>
 
+      <!-- From Date -->
+      <!-- <div class="ui calendar" id="fromDate">
+        <div class="ui input left icon">
+          <i class="calendar icon"></i>
+          <input type="date" placeholder="From Date">
+        </div>
+      </div> -->
+      <!-- To Date -->
+      <!-- <div class="ui calendar" id="toDate">
+        <div class="ui input left icon">
+          <i class="calendar icon"></i>
+          <input type="date" placeholder="To Date">
+        </div>
+      </div> -->
+
+      <!-- Download Button -->
+      <!-- <button class="ui circular primary icon button" id="download">
+        <i class="download icon"></i> Download
+      </button> -->
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <!-- <script>
+        // Add an event listener to the download button
+        document.getElementById("download").addEventListener("click", function() {
+          // Display a message on the user interface
+          var message = document.createElement("p");
+          message.textContent = "Downloading all rows, please wait...";
+          document.body.appendChild(message);
+          // Trigger an AJAX request
+          $.ajax({
+            //url: 'http://localhost/flowmonitor/app/download.php?action=downloadCSV',
+            Url: "<?= $app_root ?>/api/?function=history_export&device_id=<?= $d_id ?>",
+            method: 'GET',
+            xhrFields: {
+              responseType: 'blob' // Receive data as a binary blob
+            },
+            success: function(data, status, xhr) {
+              if (xhr.getResponseHeader('Content-Disposition')) {
+                console.log('Download started');
+                var filename = xhr.getResponseHeader('Content-Disposition').split('filename=')[1];
+                var blob = new Blob([data], {
+                  type: 'application/octet-stream'
+                });
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+              } else {
+                console.log('Download failed');
+              }
+            },
+            error: function() {
+              console.log('AJAX request failed');
+            },
+            complete: function() {
+              message.remove();
+            }
+          });
+        });
+      </script> -->
+
       <div class="second-eleven-wide-column">
         <style>
           @media (max-width: 768px) {
@@ -106,6 +173,7 @@ include_once('export.php');
             }
           }
         </style>
+ <!-- -------------------------------------------------------        -->
         <br>
         <div class="row">
           <form method="post">
@@ -125,7 +193,6 @@ include_once('export.php');
             </div>
           </form>
         </div>
-
         <div class="row">
           <div class="col-md-8">
             <?php echo $noResult; ?>
@@ -133,8 +200,40 @@ include_once('export.php');
         </div>
         <br />
       </div>
-
     </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("form").on("submit", function(event){
+    event.preventDefault();
+
+    var fromDate = $("input[name='fromDate']").val();
+    var toDate = $("input[name='toDate']").val();
+
+    var downloadUrl = "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_id ?>";
+
+    $.ajax({
+      url: downloadUrl,
+      type: 'post',
+      data: {fromDate: fromDate, toDate: toDate,
+      export: $("input[name='export']").val()},
+      success: function(response){
+        // Handle the response from the server
+      }
+    })
+    .fail(function(jqXHR, textStatus, errorThrown){
+      // This function will be executed if the AJAX request fails
+      if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
+    alert(jqXHR.responseJSON.error);
+  } else {
+      alert("An error occurred: " + textStatus + " " + errorThrown);}
+    });
+  });
+});
+</script>
+
+<!-- -------------------------------------------------------------- -->
     <div class="five wide column right floated right aligned">
       <div class="ui icon input">
         <input type="text" placeholder="Search..." id="table1_search">
@@ -165,14 +264,12 @@ include_once('export.php');
 <script src="js/pagination.js"></script>
 <script src="js/tabulation.js"></script>
 
-
-
 <script>
-  var table1 = new Tabulation({
-    apiUrl: "<?= $app_root ?>/api/?function=device_history&device_id=<?= $d_id ?>&pgno=",
+  //downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_id ?>&pgno=";
 
-    exportUrl: "<?= $app_root?>/api/?function=history_export&device_id=<?=$d_id?>&pgno=",
-    
+  var table1 = new Tabulation({
+    apiUrl: "<?= $app_root ?>/api/?function=device_history&device_id=<?= $d_id ?>&pgno=", //apiUrl is a property
+
     addUrl: "<?= $app_root ?>/api/?function=history_add",
     delUrl: "<?= $app_root ?>/api/?function=history_delete&device_id=<?= $d_id ?>&del_id=", //this is creating the url for delete by concatinating values of "app_root", "function", "device_id", and a static string "del_id=". 
     editUrl: "<?= $app_root ?>/api/?function=history_edit&row_id=",
@@ -230,5 +327,4 @@ include_once('export.php');
   });
 </script>
 </body>
-
 </html>
