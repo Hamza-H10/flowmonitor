@@ -1,4 +1,6 @@
 <?php
+
+//in this branch the functionality is in most basic stage, this branch is not required.
     $d_id = getValue('device_id',false,0);
     $database = new Database();
     $stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=".$d_id);
