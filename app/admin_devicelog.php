@@ -1,4 +1,6 @@
 <?php
+//in this branch the problem is when exporting after selecting the date range then in csv the html code is also coming. also all the rows are not not downloading at once;
+
 $d_id = getValue('device_id', false, 0);
 $database = new Database();
 $stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
