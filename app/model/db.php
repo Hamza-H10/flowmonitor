@@ -125,3 +125,4 @@ function getunit($device_id, &$unit_flow, &$unit_totalizer)
         $unit_totalizer = $row["unit_totalizer"];
     }
 }
+
