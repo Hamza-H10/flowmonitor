@@ -16,14 +16,25 @@
 </h3>
 
   <!-- DATA LIST -->
-
     <div class="ui grid ">
       <div class="eleven wide column">
         <button class="ui circular primary icon button" id="btnExport" >
           <i class="file excel icon"></i> Export
         </button>
         
+        <button class="ui circular icon button" id="graph">
+          <i class="fas fa-chart-bar"></i> Graph
+        </button>
+<style>
 
+.ui.circular.icon.button {
+/* Add your button styles here */}
+.fa-chart-bar {
+/* Add your icon styles here */
+color: orangered;
+}
+</style>
+        
         <!-- <h2 class="ui header">User List</h2> -->
 <!-- ------------------------------------------------------------ -->
        
@@ -89,6 +100,15 @@
         // $('#fromDate').popup({content : 'fromDate.'});
         //table1.init();
             table1.loadPage(1, true);
+
+
+      $(document).ready(function () {
+          $("#graph").click(function () {
+              // Redirect user to graph_index.php
+              window.location.href = "app/graph_action.php";
+          });
+      });
+
 
     $("#btnExport").click(function() {
 
