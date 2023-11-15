@@ -71,6 +71,8 @@
             }
                 
             break;
+
+// ----------------------------------------------------------------------------------------            
         case "device_history":
             $page_limit = 10;
             $page_num =  getValue("pgno", false, 1);
@@ -107,11 +109,11 @@
             }
 
             $stmt = $database->execute("SELECT id as row_id, flow_rate, total_pos_flow, signal_strength, update_date FROM history $search_text ORDER BY update_date DESC, update_time DESC LIMIT $page_start, $page_limit");
-            $num = $stmt->rowCount();
+            $num = $stmt->rowCount(); //after commenting there are no records found in data Table on client
             
             if($num > 0){
             
-                $results_arr["records"]=array();
+                $results_arr["records"]=array(); //by removing this line the dataTable is not working
                 $results_arr["text_align"]=array('', 'right', 'right', 'center', 'center');
                 //$curtime = time();
                 
@@ -120,14 +122,14 @@
                     //$last_update = getTimeText($row['date_time'], $curtime);
             
                     $alert_item=array(
-                        "row_id" => $row['row_id'],
+                        "row_id" => $row['row_id'], //when commenting out this then the flow_rate is column is not showing on the client
                         "flow_rate_(".$unit_flow.")" => $row['flow_rate'],
                         "total_pos_flow_(".$unit_totalizer.")" => $row['total_pos_flow'],
                         "signal_strength" => $row['signal_strength'],
                         "update_date" => date("d/m/Y", strtotime($row['update_date'])),
                     );
 
-                    array_push($results_arr["records"], $alert_item);
+                    array_push($results_arr["records"], $alert_item); //this is forming the whole data Table
                 }
 
                 $results_arr["page_limit"] = $num;
@@ -147,9 +149,9 @@
                     array("message" => "No history found.", "records" => null)
                 );
             }
-        
             break;
-//  -------------------------------------------------           
+            
+//  ------------------------------------------------------------------------------------------           
         case "device_history_print":
             $d_id = getValue("device_id");
             $unit_flow = "";
@@ -214,7 +216,7 @@
             }
             break;
 
-// ----------------------------------------------                  
+// ---------------------------------------------------------                  
         default:
             // set response code - 404 Not found
             http_response_code(404);

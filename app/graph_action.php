@@ -3,7 +3,7 @@
 //action.php
 // $connect = new PDO("mysql:host=localhost;dbname=", "root", "");
 // graph_action.php
-require_once(__DIR__ . '/model/db.php');
+require_once(__DIR__ . '/model/db.php');//check the exact functionality of this.
 
 
     $d_id = getValue('device_id',false,0);
@@ -24,11 +24,18 @@ if(isset($_POST["action"]))
 		// $order_column = array('order_number', 'order_total', 'order_date');
         $order_column = array('flow_rate', 'total_pos_flow', 'signal_strength', 'update_date');
 
-		$main_query = "
-		SELECT order_number, SUM(order_total) AS order_total, order_date 
-		FROM test_order_table 
-		";
-        
+		// $main_query = "
+		// SELECT order_number, SUM(order_total) AS order_total, order_date 
+		// FROM test_order_table 
+		// ";
+		
+// ---------------------
+		$main_query = "SELECT COUNT(*) AS total_records FROM history $search_text";
+
+		$search_text = " WHERE device_id=$d_id ";
+		// $stmt = $database->execute("");
+// ---------------------
+
 		$search_query = 'WHERE order_date <= "'.date('Y-m-d').'" AND ';
 
 		if(isset($_POST["start_date"], $_POST["end_date"]) && $_POST["start_date"] != '' && $_POST["end_date"] != '')
@@ -63,6 +70,7 @@ if(isset($_POST["action"]))
 			$limit_query = 'LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
 		}
 
+		// $statement = $connect->prepare($main_query . $search_query . $group_by_query . $order_by_query);
 		$statement = $connect->prepare($main_query . $search_query . $group_by_query . $order_by_query);
 
 		$statement->execute();
@@ -75,7 +83,10 @@ if(isset($_POST["action"]))
 
 		$total_rows = $statement->rowCount();
 
-		$result = $connect->query($main_query . $search_query . $group_by_query . $order_by_query . $limit_query, PDO::FETCH_ASSOC);
+		// $result = $connect->query($main_query . $search_query . $group_by_query . $order_by_query . $limit_query, PDO::FETCH_ASSOC);
+		$result = $connect->query($main_query . $search_text, PDO::FETCH_ASSOC);
+		
+
 
 		$data = array();
 
@@ -83,23 +94,27 @@ if(isset($_POST["action"]))
 		{
 			$sub_array = array();
 
-			$sub_array[] = $row['order_number'];
+			$sub_array[] = $row['flow_rate'];
 
-			$sub_array[] = $row['order_total'];
+			$sub_array[] = $row['total_pos_flow'];
 
-			$sub_array[] = $row['order_date'];
+			$sub_array[] = $row['signal_strength'];
+
+			$sub_array[] = $row['update_date'];
 
 			$data[] = $sub_array;
 		}
 
+		// This code is commonly used in AJAX requests to retrieve data from a database and display it on a web page. 
 		$output = array(
-			"draw"			=>	intval($_POST["draw"]),
-			"recordsTotal"	=>	$total_rows,
-			"recordsFiltered" => $filtered_rows,
-			"data"			=>	$data
+			"draw"			=>	intval($_POST["draw"]), //this is used to keep track of no. of request made by the client.
+			"recordsTotal"	=>	$total_rows,//for pagination purpose
+			"recordsFiltered" => $filtered_rows,//for pagination
+			"data"			=>	$data// contains the actual records that will be displayed on the webpage
 		);
 
 		echo json_encode($output);
 	}
 }
-?>
+?> 
+

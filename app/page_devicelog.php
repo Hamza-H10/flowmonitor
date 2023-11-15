@@ -22,7 +22,7 @@
           <i class="file excel icon"></i> Export
         </button>
         
-        <button class="ui circular icon button" id="graph">
+        <button class="ui circular black icon button" id="graph">
           <i class="fas fa-chart-bar"></i> Graph
         </button>
 <style>
