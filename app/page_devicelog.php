@@ -105,7 +105,7 @@ color: orangered;
       $(document).ready(function () {
           $("#graph").click(function () {
               // Redirect user to graph_index.php
-              window.location.href = "app/graph_action.php";
+              window.location.href = "app/graph_index.php";
           });
       });
 

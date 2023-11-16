@@ -24,7 +24,7 @@
         <script src="library/jquery.dataTables.min.js"></script>
         <script src="library/dataTables.bootstrap5.min.js"></script>
 
-        <title>Date Range Filter in DataTable, Chart.js using Date Range Picker with PHP MySQL using Ajax</title>
+        <title>Flow Monitor Device Graph and Records View</title>
     </head>
     <body>
 
@@ -33,7 +33,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col col-sm-9">Sales Data</div>
+                        <div class="col col-sm-9">Device Data</div>
                         <div class="col col-sm-3">
                             <input type="text" id="daterange_textbox" class="form-control" readonly />
                         </div>
@@ -47,9 +47,10 @@
                         <table class="table table-striped table-bordered" id="order_table">
                             <thead>
                                 <tr>
-                                    <th>Order Number</th>
-                                    <th>Order Value</th>
-                                    <th>Order Date</th>
+                                    <th>Flow Rate</th>
+                                    <th>Total Pos Flow</th>
+                                    <th>Signal Strength</th>
+                                    <th>Update Date</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -76,7 +77,7 @@ $(document).ready(function(){
             "serverSide" : true,
             "order" : [],
             "ajax" : {
-                url:"action.php",
+                url:"graph_action.php",
                 type:"POST",
                 data:{action:'fetch', start_date:start_date, end_date:end_date}
             },
@@ -95,7 +96,7 @@ $(document).ready(function(){
                     labels:sales_date,
                     datasets:[
                         {
-                            label : 'Sales',
+                            label : 'Data',
                             backgroundColor : 'rgb(255, 205, 86)',
                             color : '#fff',
                             data:sale
