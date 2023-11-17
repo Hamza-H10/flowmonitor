@@ -1,6 +1,9 @@
 
 <?php
 
+//NOTE: (on what to do) make the code work with only simple data retrieval first without considering the device_id and then make further changes 
+
+
 //"test_order_table" database columns names
 //order_id	order_number  order_quantity  price_per_unit  order_total  order_date  order_status  product_name	
 
@@ -41,17 +44,17 @@ if(isset($_POST["action"])) //in debugger it skipped the whole function
 
 		$main_query = "SELECT id as row_id, flow_rate, total_pos_flow, signal_strength, update_date 
 		FROM history $search_text ORDER BY update_date DESC, update_time 
-		DESC LIMIT $page_start, $page_limit";
+		DESC ";
 
 		// $stmt = $database->execute("");
 		
 		// $stmt = $database->execute("");
-// ----------------------
+// -----------------------
 
 		$search_query = 'WHERE update_date <= "'.date('Y-m-d').'" AND ';
 
 		if(isset($_POST["start_date"], $_POST["end_date"]) && $_POST["start_date"] != '' && $_POST["end_date"] != '')
-		{
+		{                                                          
 			// $search_query .= 'order_date >= "'.$_POST["start_date"].'" AND order_date <= "'.$_POST["end_date"].'" AND ';
 			$search_query .= 'update_date >= "'.$_POST["start_date"].'" AND update_date <= "'.$_POST["end_date"].'" AND ';
 		}
@@ -60,7 +63,6 @@ if(isset($_POST["action"])) //in debugger it skipped the whole function
 		{
 			$search_query .= '(order_number LIKE "%'.$_POST["search"]["value"].'%" OR order_total LIKE "%'.$_POST["search"]["value"].'%" OR order_date LIKE "%'.$_POST["search"]["value"].'%")';
 		}
-
 
 
 		// $group_by_query = " GROUP BY order_date ";

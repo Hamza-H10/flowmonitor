@@ -93,6 +93,7 @@
                 elseif($page_num > $total_pages)
                     $page_num = $total_pages;
 
+                //by removing the below lines only this the data table is not showing
                 $results_arr["cur_page"] = $page_num;
                 $page_start = ($page_num - 1) * $page_limit;
                 $results_arr["total_pages"] = $total_pages;
@@ -108,11 +109,14 @@
                 );
             }
 
+            //removing the below query the records are getting fetched and pagination and all is working but the dataTable is not showing on the client.  
+            //so the below query is only fetching the data on the dataTable
+            //check the below query via debugger that how its working. is this query working page by page. 
             $stmt = $database->execute("SELECT id as row_id, flow_rate, total_pos_flow, signal_strength, update_date FROM history $search_text ORDER BY update_date DESC, update_time DESC LIMIT $page_start, $page_limit");
             $num = $stmt->rowCount(); //after commenting there are no records found in data Table on client
             
-            if($num > 0){
             
+            if($num > 0){
                 $results_arr["records"]=array(); //by removing this line the dataTable is not working
                 $results_arr["text_align"]=array('', 'right', 'right', 'center', 'center');
                 //$curtime = time();
@@ -132,12 +136,12 @@
                     array_push($results_arr["records"], $alert_item); //this is forming the whole data Table
                 }
 
-                $results_arr["page_limit"] = $num;
+                $results_arr["page_limit"] = $num; // this is removing the pagination page indicator on the right side bottom
                 // set response code - 200 OK
                 http_response_code(200);
                 
                 // show products data in json format
-                echo json_encode($results_arr);
+                echo json_encode($results_arr);// this line is reflecting data on the client
             }        
             else {
             
