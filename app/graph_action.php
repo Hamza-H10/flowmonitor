@@ -14,7 +14,7 @@ require_once(__DIR__ . '/model/db.php');//check the exact functionality of this.
 require_once('app\model\db.php');
 require_once('C:\xampp\htdocs\flowmonitor\app\model\db.php');
 
-    $d_id = getValue('device_id',false,0);
+    // $d_id = getValue('device_id',false,0);
     $database = new Database();
     $stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=".$d_id);
 	//NOTE: for the above stmt query write the html and javascript on the webpage to show the query returned data.
@@ -39,7 +39,7 @@ if(isset($_POST["action"])) //in debugger it skipped the whole function
 		// ";
 		
 // ----------------------
-		$main_query2= "SELECT COUNT(*) AS total_records FROM history $search_text";
+		// $main_query2= "SELECT COUNT(*) AS total_records FROM history $search_text";
 		$search_text = " WHERE device_id=$d_id ";
 
 		$main_query = "SELECT id as row_id, flow_rate, total_pos_flow, signal_strength, update_date 

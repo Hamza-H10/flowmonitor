@@ -86,7 +86,7 @@
             $stmt = $database->execute("SELECT COUNT(*) AS total_records FROM history $search_text");
             $results_arr = array();
             if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $total_records = $row['total_records'];
+                $total_records = $row['total_records'];//this means the value stored in the key 'total_records' in the $row array is assigned to $total_records
                 $total_pages = intval($total_records / $page_limit) + (($total_records % $page_limit) ? 1:0);
                 if($page_num < 1)
                     $page_num = 1;
@@ -113,7 +113,7 @@
             //so the below query is only fetching the data on the dataTable
             //check the below query via debugger that how its working. is this query working page by page. 
             $stmt = $database->execute("SELECT id as row_id, flow_rate, total_pos_flow, signal_strength, update_date FROM history $search_text ORDER BY update_date DESC, update_time DESC LIMIT $page_start, $page_limit");
-            $num = $stmt->rowCount(); //after commenting there are no records found in data Table on client
+            $num = $stmt->rowCount(); //num = 10 (rows). so, the above query is used to get data for 10 rows for respective page_num
             
             
             if($num > 0){
@@ -125,7 +125,7 @@
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                     //$last_update = getTimeText($row['date_time'], $curtime);
             
-                    $alert_item=array(
+                    $alert_item=array(//in the debugger after line row_id, it come out of code block and next executes array_push
                         "row_id" => $row['row_id'], //when commenting out this then the flow_rate is column is not showing on the client
                         "flow_rate_(".$unit_flow.")" => $row['flow_rate'],
                         "total_pos_flow_(".$unit_totalizer.")" => $row['total_pos_flow'],
@@ -143,8 +143,7 @@
                 // show products data in json format
                 echo json_encode($results_arr);// this line is reflecting data on the client
             }        
-            else {
-            
+            else {            
                 // set response code - 404 Not found
                 http_response_code(404);
                 
