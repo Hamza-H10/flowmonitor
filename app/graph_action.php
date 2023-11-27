@@ -1,6 +1,5 @@
 
 <?php
-
 //NOTE: (on what to do) make the code work with only simple data retrieval first without considering the device_id and then make further changes 
 
 
@@ -11,20 +10,20 @@
 // $connect = new PDO("mysql:host=localhost;dbname=", "root", "");
 // graph_action.php
 require_once(__DIR__ . '/model/db.php');//check the exact functionality of this.
-require_once('app\model\db.php');
-require_once('C:\xampp\htdocs\flowmonitor\app\model\db.php');
+// require_once('app\model\db.php');//this is the relative path
+
+// require_once('C:\xampp\htdocs\flowmonitor\app\model\db.php');
 
     // $d_id = getValue('device_id',false,0);
     $database = new Database();
-    $stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=".$d_id);
+    // $stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=".$d_id);
 	//NOTE: for the above stmt query write the html and javascript on the webpage to show the query returned data.
 
     // retrieve our table contents
-    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)){ //in debugger it skipped this function
-        $device_name = $row["device_friendly_name"];
-        $device_number = $row["device_number"];
-    }
-
+    // if ($row = $stmt->fetch(PDO::FETCH_ASSOC)){ //in debugger it skipped this function
+    //     $device_name = $row["device_friendly_name"];
+    //     $device_number = $row["device_number"];
+    // }
 
 if(isset($_POST["action"])) //in debugger it skipped the whole function
 {
@@ -70,6 +69,7 @@ if(isset($_POST["action"])) //in debugger it skipped the whole function
 
 		$order_by_query = "";
 
+		//'$_POST["order"]' variable is an associative array and "order" refers to the key in the associative array $_POST
 		if(isset($_POST["order"])) //the isset function checks if the variable is set and is not NULL.
 		{
 			$order_by_query = 'ORDER BY '.$order_column[$_POST['order']['0']['column']].' '.$_POST['order']['0']['dir'].' ';
@@ -79,7 +79,12 @@ if(isset($_POST["action"])) //in debugger it skipped the whole function
 			// $order_by_query = 'ORDER BY order_date DESC ';
 			$order_by_query = 'ORDER BY update_date DESC ';
 		}
+// -----------------------------------------------------------------
 
+		echo "The value of the associative array is: " . $_POST["order"];
+		echo "The value of the order key is: " . $_POST["order"]["0"]["column"];
+
+// ------------------------------------------------------------------
 		$limit_query = '';
 
 		if($_POST["length"] != -1)
@@ -130,7 +135,7 @@ if(isset($_POST["action"])) //in debugger it skipped the whole function
 			"data"			=>	$data// contains the actual records that will be displayed on the webpage
 		);
 
-		echo json_encode($output);
+		echo json_encode($output); //this will echo the output
 	}
 }
 ?> 
