@@ -88,7 +88,7 @@ $(document).ready(function(){
 
                 for(var count = 0; count < settings.aoData.length; count++)
                 {
-                    sales_date.push(settings.aoData[count]._aData[2]);
+                    sales_date.push(settings.aoData[count]._aData[2]); //settings.aoData[count] is an array of objects that contains the data for the sales.
                     sale.push(parseFloat(settings.aoData[count]._aData[1]));
                 }
 
