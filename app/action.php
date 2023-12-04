@@ -1,26 +1,33 @@
 
 <?php
-
-//"test_order_table" database columns names
-//order_id	order_number  order_quantity  price_per_unit  order_total  order_date  order_status  product_name	
-
+// ------------------------------------------------------
 //action.php
+//all being done for getting device id
 // $connect = new PDO("mysql:host=localhost;dbname=flowmeter_db", "root", "");
-
+$redirect = getValue("page", false, "home"); //the default value of the page parameter is set to "home" if it is not provided or is false.
+$page_action = getValue("action", false, null);
+$page_open = "./app/page_" . $redirect . ".php";
+if (file_exists($page_open)) {
+	require "./app/menu.php";
+	require $page_open;
+} else {
+	die("Invalid link specified");
+}
+// --------------------------------------------------------
 require_once(__DIR__ . '/model/db.php');
 
 $d_id = getValue('device_id', false, 0);
 
 $database = new Database();
 
-// $stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=".$d_id);
+$stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
 //NOTE: for the above stmt query write the html and javascript on the webpage to show the query returned data.
 
 // retrieve our table contents
-// if ($row = $stmt->fetch(PDO::FETCH_ASSOC)){ //in debugger it skipped this function
-//     $device_name = $row["device_friendly_name"];
-//     $device_number = $row["device_number"];
-// }
+if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { //in debugger it skipped this function
+	$device_name = $row["device_friendly_name"];
+	$device_number = $row["device_number"];
+}
 
 if (isset($_POST["action"])) {
 	if ($_POST["action"] == 'fetch') {
