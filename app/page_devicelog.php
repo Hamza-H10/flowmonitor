@@ -111,7 +111,13 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       $("#graph").click(function() {
         // Redirect user to graph_index.php
         // window.location.href = "app/graph_index.php";
-        window.location.href = "app/index.php";
+        // window.location.href = "app/index.php";
+        // window.location.href = "app/graph.php";
+
+        // Redirect user to graph.php with d_id parameter
+        // window.location.href = "app/graph.php?d_id=<?= $d_id ?>";
+
+        window.location.href = "app/action.php?d_id=<?= $d_id ?>";
       });
     });
 

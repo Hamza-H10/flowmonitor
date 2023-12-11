@@ -4,19 +4,21 @@
 //action.php
 //all being done for getting device id
 // $connect = new PDO("mysql:host=localhost;dbname=flowmeter_db", "root", "");
-$redirect = getValue("page", false, "home"); //the default value of the page parameter is set to "home" if it is not provided or is false.
-$page_action = getValue("action", false, null);
-$page_open = "./app/page_" . $redirect . ".php";
-if (file_exists($page_open)) {
-	require "./app/menu.php";
-	require $page_open;
-} else {
-	die("Invalid link specified");
-}
+// $redirect = getValue("page", false, "home"); //the default value of the page parameter is set to "home" if it is not provided or is false.
+// $page_action = getValue("action", false, null);
+// $page_open = "./app/page_" . $redirect . ".php";
+// if (file_exists($page_open)) {
+// 	require "./app/menu.php";
+// 	require $page_open;
+// } else {
+// 	die("Invalid link specified");
+// }
 // --------------------------------------------------------
 require_once(__DIR__ . '/model/db.php');
 
-$d_id = getValue('device_id', false, 0);
+$d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
+
+// $d_id = getValue('device_id', false, 0);
 
 $database = new Database();
 
@@ -29,6 +31,7 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { //in debugger it skipped this funct
 	$device_number = $row["device_number"];
 }
 
+// Check if the 'action' parameter is set in the POST request
 if (isset($_POST["action"])) {
 	if ($_POST["action"] == 'fetch') {
 
