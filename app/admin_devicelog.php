@@ -138,13 +138,13 @@ try {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    // Add an event listener to the download button
-    document.getElementById("download").addEventListener("click", function () {
-        // Display a message on the user interface
-        var message = document.createElement("p");
-        message.textContent = "Downloading all rows, please wait...";
-        document.body.appendChild(message);
-        // Trigger an AJAX request
+    // Add an event listener to the download button
+    document.getElementById("download").addEventListener("click", function () {
+        // Display a message on the user interface
+        var message = document.createElement("p");
+        message.textContent = "Downloading all rows, please wait...";
+        document.body.appendChild(message);
+        // Trigger an AJAX request
 $.ajax({
     url: 'http://localhost/flowmonitor/app/download.php?action=downloadCSV',
     method: 'GET',
