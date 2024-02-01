@@ -19,6 +19,7 @@
 <h3 class="ui top attached header compact">
   Device Details
   <span>
+
     <button class="ui teal mini icon right floated button" id="table1_form_show" >
       ADD &nbsp;
       <i class="add alternate icon"></i>
