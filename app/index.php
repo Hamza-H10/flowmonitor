@@ -1,7 +1,7 @@
 <?php
 
 //index.php
-
+$d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
 ?>
 
 <!doctype html>
