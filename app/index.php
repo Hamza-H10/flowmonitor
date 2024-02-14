@@ -2,6 +2,7 @@
 
 //index.php
 $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
+
 ?>
 
 <!doctype html>
@@ -66,13 +67,19 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
 </html>
 
 <script>
-    $(document).ready(function() {
 
-        fetch_data();
+</script>
+
+<script>
+    $(document).ready(function() {
+        var d_id = "<?php echo $d_id; ?>";
+
+        fetch_data('', '', d_id); // Pass d_id when calling fetch_data
+        // fetch_data();
 
         var sale_chart;
 
-        function fetch_data(start_date = '', end_date = '') {
+        function fetch_data(start_date = '', end_date = '', d_id = '') {
             var dataTable = $('#order_table').DataTable({
                 "processing": true,
                 "serverSide": true,
@@ -84,7 +91,8 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
                     data: {
                         action: 'fetch',
                         start_date: start_date,
-                        end_date: end_date
+                        end_date: end_date,
+                        d_id: d_id
                     }
                 },
                 "drawCallback": function(settings) {
