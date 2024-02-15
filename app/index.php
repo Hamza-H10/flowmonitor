@@ -38,7 +38,7 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
                 <div class="row">
                     <div class="col col-sm-9">Device Data</div>
                     <div class="col col-sm-3">
-                        <input type="text" id="daterange_textbox" class="form-control" readonly />
+                        <!-- <input type="text" id="daterange_textbox" class="form-control" readonly /> -->
                     </div>
                 </div>
             </div>
@@ -98,19 +98,24 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
                 "drawCallback": function(settings) {
                     var sales_date = [];
                     var sale = [];
+                    var flowrate = [];
 
                     for (var count = 0; count < settings.aoData.length; count++) {
-                        sales_date.push(settings.aoData[count]._aData[2]); //settings.aoData[count] is an array of objects that contains the data for the sales.
+                        sales_date.push(settings.aoData[count]._aData[3]); //settings.aoData[count] is an array of objects that contains the data for the sales.
                         sale.push(parseFloat(settings.aoData[count]._aData[1]));
+                        // flowrate.push(parseFloat(settings.aoData[count]._aDate[0]));
                     }
 
                     var chart_data = {
                         labels: sales_date,
                         datasets: [{
-                            label: 'Data',
+                            label: 'Total Pos Flow',
+                            // label: 'Flow Rate',
                             backgroundColor: 'rgb(255, 205, 86)',
+                            backgroundColor: 'rgb(127,255,212)',
+                            // backgroundColor: 'rgb(106, 156, 168)',
                             color: '#fff',
-                            data: sale
+                            data: sale,
                         }]
                     };
 
@@ -122,7 +127,7 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
 
                     sale_chart = new Chart(group_chart3, {
                         type: 'bar',
-                        data: chart_data
+                        data: chart_data,
                     });
                 }
             });
@@ -143,7 +148,6 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
             $('#order_table').DataTable().destroy();
 
             fetch_data(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
-
         });
 
     });
