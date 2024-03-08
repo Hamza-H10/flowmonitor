@@ -1,5 +1,10 @@
 
 <?php
+
+// Allow cross-origin requests
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 // ------------------------------------------------------
 //action.php
 //all being done for getting device id
@@ -19,26 +24,20 @@
 // ini_set('display_errors', 1);
 // $connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// require_once(__DIR__ . '/model/db.php');//uncomment 
+// require_once(__DIR__ . '/model/db.php'); //uncomment 
+require_once('model/db.php');
+// ----------------------------------------
+// $connect = new PDO("mysql:host=localhost;dbname=flowmeter_db", "flowmeter_user", "s5R,ucJ!)@}W");
 
-// $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;//uncomment
+// $database = new  Database();
 
-// $d_id = getValue('device_id', false, 0);
-
-// $database = new Database();//uncomment
-
-$connect = new PDO("mysql:host=localhost;dbname=flowmeter_db", "flowmeter_user", "s5R,ucJ!)@}W");
-
-// $stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
-//NOTE: for the above stmt query write the html and javascript on the webpage to show the query returned data.
-
-
-// retrieve our table contents
-// if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { //in debugger it skipped this function
-// 	$device_name = $row["device_friendly_name"];
-// 	$device_number = $row["device_number"];
+// if (!isset($session_user_type)) {
+// 	echo "You cannot directly access this page.";
+// 	die();
 // }
-//-----------------------------------
+
+$connect = new Database();
+
 // Check if the 'action' parameter is set in the POST request
 if (isset($_POST["action"])) {
 	if ($_POST["action"] == 'fetch') {
@@ -73,57 +72,63 @@ if (isset($_POST["action"])) {
 		$limit_query = '';
 
 		if ($_POST["length"] != -1) {
-			$limit_query = 'LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
+			$limit_query = 'LIMIT ' . $_POST['start'] . ', ' . ($_POST['length'] + 1);
 		}
 
-		$statement = $connect->prepare($main_query . $search_query . $group_by_query . $order_by_query);
+		$statement = ($main_query . $search_query . $group_by_query . $order_by_query);
+		$complete_query = ($main_query . $search_query . $group_by_query . $order_by_query . $limit_query);
 
-		$statement->execute();
+		$statement = $connect->execute($main_query . $search_query . $group_by_query . $order_by_query);
+
+		$complete_query = $connect->execute($main_query . $search_query . $group_by_query . $order_by_query . $limit_query);
 
 		$filtered_rows = $statement->rowCount();
 
-		$statement = $connect->prepare($main_query . $group_by_query);
-
-		$statement->execute();
+		$statement = $connect->execute($main_query . $group_by_query);
 
 		$total_rows = $statement->rowCount();
 
-		$result = $connect->query($main_query . $search_query . $group_by_query . $order_by_query . $limit_query, PDO::FETCH_ASSOC);
+		// $result = $connect->execute($main_query . $search_query . $group_by_query . $order_by_query . $limit_query)->fetchAll(PDO::FETCH_ASSOC);
+
+		$result = $connect->execute($main_query . $search_query . $group_by_query . $order_by_query . $limit_query, PDO::FETCH_ASSOC);
+
+		if ($result->rowCount() == 0) {
+			$output = array(
+				"error" => "NO DATA FOUND FOR THE SELECTED DATE RANGE"
+			);
+			echo json_encode($output);
+		} else {
+
+			$data = array();
+
+			foreach ($result as $row) {
+				$sub_array = array();
+
+				$sub_array[] = $row['flow_rate'];
+
+				$sub_array[] = $row['total_pos_flow'];
+
+				$sub_array[] = $row['signal_strength'];
+
+				$sub_array[] = $row['update_date'];
+
+				$data[] = $sub_array;
+			}
+
+			// This code is commonly used in AJAX requests to retrieve data from a database and display it on a web page. 
+			$output = array(
+				"draw"			=>	intval($_POST["draw"]), //this is used to keep track of no. of request made by the client.
+				"recordsTotal"	=>	$total_rows, //for pagination purpose
+				"recordsFiltered" => $filtered_rows, //for pagination
+				"data"			=>	$data // contains the actual records that will be displayed on the webpage
+			);
+
+			echo json_encode($output); //this will echo the output
+			// echo json_encode(array("output" => $output, "data" => $data, "result" => $result, "statement" => $statement, "complete_query" => $complete_query, "order_by_query" => $order_by_query, "main_query" => $main_query, "search_query" => $search_query, "group_by_query" => $order_by_query, "limit_query" => $limit_query, "POST" => $_POST));
+		}
 	}
 }
 
-
-// $result = $connect->query($main_query . $search_text, PDO::FETCH_ASSOC);
-// $result = $connect->query($main_query, PDO::FETCH_ASSOC);
-
-
-$data = array();
-
-foreach ($result as $row) {
-	$sub_array = array();
-
-	$sub_array[] = $row['flow_rate'];
-
-	$sub_array[] = $row['total_pos_flow'];
-
-	$sub_array[] = $row['signal_strength'];
-
-	$sub_array[] = $row['update_date'];
-
-	$data[] = $sub_array;
-}
-
-// This code is commonly used in AJAX requests to retrieve data from a database and display it on a web page. 
-$output = array(
-	"draw"			=>	intval($_POST["draw"]), //this is used to keep track of no. of request made by the client.
-	"recordsTotal"	=>	$total_rows, //for pagination purpose
-	"recordsFiltered" => $filtered_rows, //for pagination
-	"data"			=>	$data // contains the actual records that will be displayed on the webpage
-);
-
-echo json_encode($output); //this will echo the output
-
-
-
 ?> 
+
 

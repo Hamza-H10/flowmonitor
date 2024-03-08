@@ -1,5 +1,11 @@
 <?php
+// Allow cross-origin requests
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 
+
+// include("menu.php");
 //index.php
 $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
 
@@ -22,9 +28,16 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
     <script src="library/bootstrap-5/bootstrap.bundle.min.js"></script>
     <script src="library/moment.min.js"></script>
     <script src="library/daterangepicker.min.js"></script>
-    <script src="library/Chart.bundle.min.js"></script>
+    <!-- <script src="library/Chart.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="library/jquery.dataTables.min.js"></script>
     <script src="library/dataTables.bootstrap5.min.js"></script>
+    <!--chart.js library will be included here befor the chartjs-plugin-datalabels -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+
 
     <title>Flow Monitor Device Graph and Records View</title>
 </head>
@@ -36,16 +49,19 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col col-sm-9">Device Data</div>
+                    <div class="col col-sm-9"> <!-- Adjust column size as needed -->
+                        Device Data
+                        <button id="refreshButton" class="btn btn-secondary ms-auto float-end" style="background-color: lightgrey; color: black;">Chart Reload</button> <!-- Refresh button -->
+                    </div>
                     <div class="col col-sm-3">
-                        <!-- <input type="text" id="daterange_textbox" class="form-control" readonly /> -->
+                        <input type="text" id="daterange_textbox" class="form-control" readonly />
                     </div>
                 </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <div class="chart-container pie-chart">
-                        <canvas id="bar_chart" height="40"> </canvas>
+                        <canvas id="bar_chart" height="60"> </canvas>
                     </div>
                     <table class="table table-striped table-bordered" id="order_table">
                         <thead>
@@ -72,6 +88,10 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
 
 <script>
     $(document).ready(function() {
+
+        // Register the plugin to all charts:
+        // Chart.register(ChartDataLabels);
+
         var d_id = "<?php echo $d_id; ?>";
 
         fetch_data('', '', d_id); // Pass d_id when calling fetch_data
@@ -95,10 +115,28 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
                         d_id: d_id
                     }
                 },
+                dataSrc: function(response) {
+                    try {
+                        // Parse the response to a JavaScript object
+                        var data = JSON.parse(response);
+
+                        // Log each element of the data array
+                        data.data.forEach(function(record) {
+                            console.log(record);
+                        });
+
+                        // Return the data property for DataTables to display
+                        return data.data;
+                    } catch (error) {
+                        console.error("Error parsing response:", error);
+                        return [];
+                    }
+                },
                 "drawCallback": function(settings) {
                     var sales_date = [];
                     var sale = [];
                     var flowrate = [];
+                    var sale_diff = [];
 
                     for (var count = 0; count < settings.aoData.length; count++) {
                         sales_date.push(settings.aoData[count]._aData[3]); //settings.aoData[count] is an array of objects that contains the data for the sales.
@@ -106,16 +144,54 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
                         // flowrate.push(parseFloat(settings.aoData[count]._aDate[0]));
                     }
 
+                    // Calculate the differences between consecutive elements in the sale array
+                    for (var i = 0; i < sale.length - 1; i++) {
+                        // for (var i = 0; i <= sale.length; i++) {
+                        var nextSale = sale[i + 1] !== undefined ? sale[i + 1] : 0;
+                        var diff = sale[i] - nextSale;
+                        // var diff = sale[i] - sale[i + 1];
+
+                        // sale_diff.push(sale[i] - sale[i + 1]);
+                        sale_diff.push(diff < 0 ? 0 : diff);
+                    }
+
+                    // Update the original sale array with the differences
+                    for (var j = 0; j < sale_diff.length; j++) {
+                        sale[j] = sale_diff[j];
+                    }
+
+                    // Remove the last element from the original sale array
+                    sale.pop();
+                    sales_date.pop();
+
                     var chart_data = {
-                        labels: sales_date,
+                        labels: sales_date, //lables for the x-axis
                         datasets: [{
                             label: 'Total Pos Flow',
                             // label: 'Flow Rate',
-                            backgroundColor: 'rgb(255, 205, 86)',
-                            backgroundColor: 'rgb(127,255,212)',
+                            // backgroundColor: 'rgb(255, 205, 86)',
+                            backgroundColor: 'rgba(127,255,212,0.5)',
                             // backgroundColor: 'rgb(106, 156, 168)',
+                            borderColor: 'rgba(127,250,212,10)',
                             color: '#fff',
-                            data: sale,
+                            // data: sale,
+                            data: sale_diff,
+                            borderWidth: 1,
+                            datalabels: {
+                                color: 'darkgreen',
+                                // color: borderColor,
+                                anchor: 'end',
+                                align: 'top',
+                                offset: '5',
+                                // font: 'bold'
+                                backgroundColor: 'rgba(0,191,255,0.2)',
+                                borderColor: 'rgba(127,255,212,5)',
+                                // borderWidth: 1,
+                                borderRadius: 5,
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
                         }]
                     };
 
@@ -128,6 +204,39 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
                     sale_chart = new Chart(group_chart3, {
                         type: 'bar',
                         data: chart_data,
+                        // datalables: {
+                        //     color: 'blue'
+                        // },
+
+                        plugins: [ChartDataLabels],
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true, // Start the y-axis from 0
+                                        // You can customize other tick settings here, such as stepSize, min, max, etc.
+                                        // stepSize: 50,
+                                    }
+                                }],
+                                xAxes: [{
+                                    ticks: {
+                                        font: {
+                                            size: 12 // Adjust the font size as needed
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        // plugins: {
+                        //     datalabels: {
+                        //         anchor: 'end',
+                        //         align: 'top',
+                        //         formatter: function(value, context) {
+                        //             return value;
+                        //         }
+                        //     }
+                        // }
+
                     });
                 }
             });
@@ -147,7 +256,12 @@ $d_id = isset($_GET['d_id']) ? $_GET['d_id'] : null;
 
             $('#order_table').DataTable().destroy();
 
-            fetch_data(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
+            fetch_data(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'), d_id);
+        });
+
+        $('#refreshButton').click(function() {
+            // Perform data refresh or reload here
+            location.reload(); // Example: Reload the page
         });
 
     });

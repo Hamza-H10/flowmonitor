@@ -14,7 +14,6 @@ $app_root =  $url . "/flowmonitor";
 
 class Database
 {
-
     private $host = "localhost";
     private $db_name = "flowmeter_db";
     private $username = "flowmeter_user";

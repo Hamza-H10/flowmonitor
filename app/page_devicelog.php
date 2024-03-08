@@ -1,4 +1,15 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+
 <?php
+
+// Set caching headers
+header("Cache-Control: public, max-age=300"); // Cache for 5 minutes
+
+require_once('model/db.php');
+
 $d_id = getValue('device_id', false, 0);
 $database = new Database();
 $stmt = $database->execute("SELECT device_number, device_friendly_name FROM devices WHERE id=" . $d_id);
@@ -80,6 +91,9 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     <div id="Div_exceltable" style="display:none"></div>
   </div>
 </div>
+<!-- <button class="" id="graph"> -->
+<!-- <i class="fas fa-chart-bar"></i> Graph -->
+<!-- </button> -->
 
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/tableToExcel.js"></script>
