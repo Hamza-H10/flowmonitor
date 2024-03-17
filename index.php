@@ -28,7 +28,7 @@ if ($redirect == "logout") {
         if (session_id() != "" || isset($_COOKIE[session_name()])) {
             // Delete the session cookie.
             setcookie(session_name(), '', time() - 2592000, '/');
-        }
+        } //this is to destroy the current session 
 
         session_destroy(); // Destroy the session.
         header("refresh:1;url=?page=home"); // Redirect to the home page after 1 second.

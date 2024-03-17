@@ -1,11 +1,9 @@
 <?php
 //in this the database is connected from a database instance of the database class 
-// include_once("app/model/db.php");//check the error and compare with the below path error in the browser 
-require_once('model/db.php');//compare the above path with this
-
+include_once("app/model/db.php");
 $database = new Database();
 $query = "SELECT * FROM history ORDER BY update_date DESC";
-$results = $database->execute2($query);
+$results = $database->execute($query);
 $allorders = array();
 while ($order = $results->fetch(PDO::FETCH_ASSOC)) {
     $allorders[] = $order;

@@ -12,12 +12,12 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 ?>
 <?php
-// include_once('export.php');
 
-// Set the $redirect variable
-// $redirect = "history_download";
 ?>
  <!-- downloadUrl: "<?= $app_root ?>/api/?function=history_download&device_id=<?= $d_id ?>"; -->
+
+include_once('export.php');
+
 <!-- ----------------------- -->
 <!-- the date buttons will style from bootstrappcdn library but enabling this delete function is not working fix this. -->
 
