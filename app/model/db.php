@@ -66,23 +66,28 @@ function hashPassword($password)
 }
 
 function getValue($value_name, $required = true, $default = null)
-{
+{    // Check if the specified value exists in the request parameters ($_REQUEST).
     if (isset($_REQUEST[$value_name])) {
+        // If the value exists, filter and sanitize it as a string and return it.
         return filter_var($_REQUEST[$value_name], FILTER_SANITIZE_STRING);
     } else {
+        // If the value is not found in the request parameters ($_REQUEST).
         if ($required) {
+            // If the value is required (based on the $required parameter), return a 400 Bad Request HTTP status code.
             http_response_code(400);
-
-            // tell the user no products found
+            // Tell the user that the specified parameter is required.
             echo json_encode(
                 array("message" => "Required parameter '$value_name'.")
             );
+            // Terminate the script execution.
             die();
         } else {
+            // If the value is not required and not found, return the specified default value (or null if not provided).
             return $default;
         }
     }
 }
+
 
 function getdmy($device_id)
 {

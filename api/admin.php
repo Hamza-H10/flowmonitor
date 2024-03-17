@@ -377,7 +377,7 @@ switch ($redirect) {
 
     case "history_fetch":
         $edit_id = getValue("row_id"); // Get the value of `row_id` from the request
-        $stmt = $database->execute("SELECT flow_rate, total_pos_flow, signal_strength, update_date FROM history WHERE id=".$edit_id);
+        $stmt = $database->execute("SELECT flow_rate, total_pos_flow, signal_strength, update_date FROM history WHERE id=" . $edit_id);
         // ----------------------
         //$stmt = $database->execute("SELECT flow_rate, total_pos_flow, signal_strength, update_date FROM history");
         // ----------------------
@@ -444,6 +444,8 @@ switch ($redirect) {
             }
         }
         break;
+        // Set the $redirect variable
+// $redirect = "history_download";
 
     case "history_delete":
         // Get the ID(s) to be deleted
@@ -466,9 +468,9 @@ switch ($redirect) {
             break;
         }
 
-        // -------------------------
+        // -----------------------------------------------------------
         //switch($redirect) {
-    case "history_download":
+    case "history_export":
         $stmt = $database->execute("SELECT * FROM history");
         $num = $stmt->rowCount();
 
@@ -492,19 +494,15 @@ switch ($redirect) {
                 }
                 fclose($output);
             } else {
-                http_response_code(500); // Internal Server Error
-                echo json_encode(
-                    array("message" => "Error generating CSV file.", "records" => null)
-                );
+                // Send a JSON response if fromDate or toDate is not set
+                header('Content-Type: application/json');
+                echo json_encode(array('error' => 'fromDate or toDate is not set.'));
+                exit;
             }
-        } else {
-            http_response_code(400);
-            echo json_encode(
-                array("message" => "No records found for download.", "records" => null)
-            );
         }
         break;
-        // --------------------------------
+            
+        // ------------------------------------------------------------
 
     case "device_history":
         $page_limit = 10;
@@ -540,7 +538,7 @@ switch ($redirect) {
                 array("message" => "No records found.", "records" => null)
             );
         }
-
+        //the below query is working fine have checked in the php my admin replacing the placeholders
         $stmt = $database->execute("SELECT id as row_id, flow_rate, total_pos_flow, signal_strength, update_date FROM history $search_text ORDER BY update_date DESC, update_time DESC LIMIT $page_start, $page_limit");
         $num = $stmt->rowCount();
 

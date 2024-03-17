@@ -67,6 +67,10 @@ if ($page_action == "login") {
 // Include the header file.
 require "./app/header.php";
 
+// -----------------------
+$page_open = "./app/page_" . $redirect . ".php";
+// -----------------------
+
 if ($logged_in == true) {
     if ($session_user_type == 1) {
         $page_open = "./app/admin_" . $redirect . ".php";
