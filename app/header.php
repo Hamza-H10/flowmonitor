@@ -16,6 +16,9 @@
   <link rel="stylesheet" href="css/semantic.min.css">
   <link rel="stylesheet" href="css/calendar.min.css" />
 
+  <!-- added this so if any functionality gets break then please check here if below link is the reason for that. -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
   <style type="text/css">
   .ui.menu .item img.logo {
     /*margin-right: 1.5em;*/

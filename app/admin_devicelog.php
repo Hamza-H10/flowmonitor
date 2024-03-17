@@ -11,6 +11,16 @@
         $device_number = $row["device_number"];
     }
 ?>
+<!-- ------------------------------------------ -->
+<?php
+try {
+    $conn1 = new PDO("mysql:host=localhost;dbname=flowmeter_db", "root", "");
+    $conn1->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
+}
+?>
+<!-- ------------------------------------------ -->
 <div class="ui main container">
 
 <h3 class="ui center aligned header">
@@ -66,7 +76,6 @@
             </div>
               <?php 
                   echo "<input type='hidden' name='device_id' id='device_id' value='$d_id'>  ";
-    
               ?>
         </div>
 
@@ -85,32 +94,59 @@
         <button class="ui circular negative icon button" id="table1_delete" >
           <i class="trash alternate icon"></i>
         </button>
-       <!-- From Date -->
-    <div class="ui calendar" id="fromDate">
+        </div>
+
+        <div class="five wide column right floated right aligned">
+        <div class="ui icon input">
+          <input type="text" placeholder="Search..." id="table1_search">
+          <i class="circular delete link icon" id="table1_clear_btn"></i>
+          <i class="inverted circular search link icon" id="table1_search_btn"></i>
+        </div>        
+      </div>
+
+      <!-- <div class="second-eleven-wide-column"> -->
+      <!-- <style>
+    .custom-row {
+        display: flex;
+        justify-content: center;
+    }
+    .custom-column {
+        width: 50%; /* Adjust the width value as per your requirement */
+    }
+</style> -->
+
+<div class="row custom-row">
+    <!-- From Date -->
+    <div class="ui calendar custom-column" id="fromDate">
         <div class="ui input left icon">
             <i class="calendar icon"></i>
             <input type="date" placeholder="From Date">
         </div>
     </div>
     <!-- To Date -->
-    <div class="ui calendar" id="toDate">
+    <div class="ui calendar custom-column" id="toDate">
         <div class="ui input left icon">
             <i class="calendar icon"></i>
             <input type="date" placeholder="To Date">
         </div>
     </div>
-<!-- Download Button --><button class="ui circular primary icon button" id="download">
-    <i class="download icon"></i> Download
-</button>
+    <!-- Download Button -->
+    <button class="ui circular primary icon button custom-column" id="download">
+        <i class="download icon"></i> Download
+    </button>
+</div>
+      <!-- </div> -->
+    
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-    // Add an event listener to the download button
-    document.getElementById("download").addEventListener("click", function () {
-        // Display a message on the user interface
-        var message = document.createElement("p");
-        message.textContent = "Downloading all rows, please wait...";
-        document.body.appendChild(message);
-        // Trigger an AJAX request
+    // Add an event listener to the download button
+    document.getElementById("download").addEventListener("click", function () {
+        // Display a message on the user interface
+        var message = document.createElement("p");
+        message.textContent = "Downloading all rows, please wait...";
+        document.body.appendChild(message);
+        // Trigger an AJAX request
 $.ajax({
     url: 'http://localhost/flowmonitor/app/download.php?action=downloadCSV',
     method: 'GET',
@@ -142,17 +178,12 @@ $.ajax({
         message.remove();
     }
 });
-    });
+    });
 </script>
+<!-- ----------------------------------------- -->
 
+      
 
-      <div class="five wide column right floated right aligned">
-        <div class="ui icon input">
-          <input type="text" placeholder="Search..." id="table1_search">
-          <i class="circular delete link icon" id="table1_clear_btn"></i>
-          <i class="inverted circular search link icon" id="table1_search_btn"></i>
-        </div>        
-      </div>
       <div id="table1_datawindow" class="table_datawindow"></div>
       <!-- <div class="content" id="info"></div> -->
       <div id="table1_pagination" class="eleven wide column"></div>
@@ -161,7 +192,6 @@ $.ajax({
           <div class="content" id="table1_info"></div>
         </h4>
       </div>
-    </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -183,8 +213,7 @@ $.ajax({
             selectMulti: true,
             });
 
-//fetchUrl: "<?=$app_root?>/api/?function=history_fetch",
-        
+            
     $(function() {
         $('.selection.dropdown').dropdown();
         $('.ui.checkbox').checkbox();
@@ -239,34 +268,9 @@ $.ajax({
           }
         });
     });
-// --------------    
-    function downloadCSV() {
-    
-        var tabulationData = table1.getData();
-
-        // Create a CSV string from the tabulation data
-        var csv = "Flow Rate (Cubic Meter/ Hour),Total Pos Flow (Cubic Meter),Signal Strength,Update Date\n"; // Replace with your column headers
-        
-        for (var i = 0; i < tabulationData.length; i++) {
-            var row = tabulationData[i];
-            csv += row.column1 + "," + row.column2 + "," + row.column3 + "\n"; // Replace with your row data
-        }
-        // Create a Blob object from the CSV string
-        var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-        
-        // Create a temporary download link
-        var link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "Device_data.csv"; // Replace with your desired file name
-
-        // Trigger the download
-        link.click();
-    }
-// ------------------
-
-
+// -----------------    
+// -----------------
 </script>
-
-  </script>
+</script>
 </body>  
 </html>
